@@ -1,5 +1,637 @@
+				 Kotlin
 
 Software setup:
 1.JDK 17
 2.Intellij Idea - community edition.
-......................................................................................
+.....................................................................................
+
+What is Kotlin?
+  Kotlin is one of the programming language.
+  Kotlin is programming language for "JVM".
+
+What is JVM?
+  Java Virtual Machine, which is the process used to run java applications.
+  JVM is abstract computer which solves the problem of Platform Independant.
+
+What is Java?
+   According to Sun Micro System, Java is  technology.
+
+What is technology?
+   Technology means solving the Pratical real time Problems.
+
+Why Java Technology created?
+   Since java is technology, it must have created for solving some problems.
+
+Java was created to solve the problem of "Platform Specific Application Development"
+in other words, java was created to solve the problem of "Platform Independant".
+Before Java apps were used to build using c and c++  programming languages.
+
+Java Technology brought many things.
+
+Java means lot 
+
+1.Java Programming language
+2.tools 
+    compilers,debuggers,libs,apis
+3.Runtime- JRE
+4.JDK
+
+What is Java Programming language?
+  Java Programming language was created based on "c++,Small Talk,C" like languages.
+
+Java features
+1.Java was created based on the style called "Object oriented"
+2.Java removed pointers 
+3.java added lot of new features automatic memory management
+4.Java introduced  Platform independant Threading features
+etc....
+
+How java achives the platform independant?
+ JVM is abstract machine through which we can achive platform independant features.
+
+After publishing java, Sun Micro systems wanted to improve java technology for that who formed non profitable organziation who standarize the java technology.
+
+JCP - Java Community Processs:
+..............................
+JCP is organization who standards java technology even today.
+
+After SUN Micro systems, Java technology was acquired by "Oracle".
+
+Classification of Java Technology:
+..................................
+JCP classifies the Java into three Major Editions
+
+1.JAVA SE - Standard Edition
+2.JAVA EE - Enterprise Edition
+3.JAVA ME - Micro Edition
+.....................................................................................
+JCP has published so many specifications.
+Java Versions are released by JCP only - java 11, java 12,java 17,java 18,java 20...
+.....................................................................................
+			JSR 223 :Scripting For the Java Platform
+....................................................................................
+JSR 223 Spec was released on June-10-2023.
+
+Why this spec?
+ Before JSR 223, Only one programming langugage was there for JVM-Java programming language.
+
+This spec aim was to introduce new languages for JVM. - Poly Glot languages for java platform.
+.....................................................................................
+		  Birth of new Programming languages for JVM
+.....................................................................................
+
+Based ont this spec , the first language other than java pl was created for JVM - Groovy Programming language.
+.....................................................................................
+
+Top JVM languages today
+ 
+1.Java
+2.Kotlin
+3.Scala
+4.Groovy
+5.Clojure
+6.Fantom
+7.Ceylon
+8.Jython
+9.JRuby
+10.Frege
+11.Xtend
+12.Golo
+13.Concurnaas
+14.Yeti
+
+	Java PL  Groovy Scala Kotlin Closure Any
+       ..........................................
+			|
+		    Byte Code
+			|
+		       JVM
+
+All programming langagues compiles their code into byte code which is platform independant code.
+.....................................................................................
+		 
+How the programming languages differs each other?
+  
+   The every programming languages follows different programming styles.
+
+Programming styles:
+
+There are numerous programming styles are available.
+
+1.Object oriented
+2.Functional Programming
+3.Procedural Programming
+4.Rule Based Programming
+etc........
+
+if i want to create new programming language, first i need to select any one of the programming style or can combine many styles.
+
+A language can follow one style or many styles
+
+if a language follows one style, that language is called "single style language"
+if a language folows many styles , that language is called "Hyibrid style language".
+
+eg:
+ C language follows only one style- Procedural Style, so that we can call c language is procedural language.
+
+ C++ language follows only one style- Object oriented Style, so that we call C++ is object oriented language.
+
+ Java language followed initally when it was created one style - Object oriented Style - Java was Object orinted language.
+
+ Later Java (Java 8) introduced feature called "Functional Programming", after that Java became hybrid language- Java is object oriented,functional style programming language.
+.....................................................................................
+Groovy:
+ Groovy was created functional and object oriented programming languages.
+ Groovy is the first functional programming language for JVM.
+
+Scala
+  Object oriented and functional style language
+
+Kotlin:
+  Kotlin is Object oriented, functional style programming languge
+.....................................................................................
+		 Kotlin is dervied from "Scala and Groovy"
+.....................................................................................
+		 Language is classififed based on Data types
+....................................................................................
+
+1.Strongly Typed /Static Typed 
+   The type of variable is decided during compile
+ 
+int a =10;
+a="Hello"
+
+
+2.Weakly typed or Dynamic typed 
+  The type of variable is decided during runtime 
+  var a=10;
+  a="hello"
+The type of a is not verified during compile time.
+
+The java is strongly typed
+The javascript is dynamic typed
+
+          "Kotlin is dynamic , strongly Typed language"
+....................................................................................
+		Language is classififed based on Program style
+....................................................................................
+
+Programming langue is classified based on two category.
+
+GPL - General Purpose Programming language.
+    language is used to build any type of apps using "imperative methodology"
+
+DSL  -Domain Specific language
+   Language is used to build specific type of apps using "Declarative methodlogy"
+
+Kotlin is kind of GPL and DSL language using "declarative methodlogy"
+
+DSL Code is more declarative
+
+   move left and move right - DSL code
+   find Sqrt of 10 - DSL code
+   take 1 pile every day at moring 7 am - DSL Code.
+
+Imperative code/Programming:
+...........................
+ Any program there is two aspects
+   ->Infra structure code
+   ->Application logic.
+What is it? How is it?
+
+Declarative Programming:
+  Focus application logic
+  more readable
+  less boiler plate
+  less code code maintaiance because less code
+eg:
+  list.sort.filter.map.find.flaten
+.....................................................................................
+   "Kotlin helps to build more declarative DSL ,functional , Object oriented apps"
+
+Kotlin language is highly multi purpose programming language
+ ->To build mobile apps->Multiplatform mobile apps - android and IOS apps
+ ->To build server side apps- Microservices, RESTFull aps, Dynamic web apps
+ ->To Platform natives apps like C++.
+
+
+Learning Path:
+..............
+1.language fundamentals
+2.Object oriented Programming in Kotlin
+3.Functional Programming in Kotlin
+4.Exception Handling
+5.Data Structures in Kotlin
+6.Cocurrency - Co-Routines
+7.Async programming /Non Blockings
+8.How to build DSL
+9.How to use In Mobile Development.
+...................................................................................
+				 Lanaguage fundamentals
+....................................................................................
+We are going to build console based kotlin apps
+
+Steps to create Kotlin Project.
+
+You can use any build tool to create kotlin Project
+
+Every kotlin programm is saved with "fileName.kt"
+
+
+Unlike Java programs , Kotlin programs need not be started with classes, you can start with main method(function).
+
+Kotlin Programming style
+
+1.file based or script based
+2.class based - oo style
+
+HelloWorld.kt
+
+fun main(){
+    println("Hello Kotlin")
+}
+
+In Kotlin:
+
+=>fun is used to declare a function
+=>The main function is where your program starts from
+=>The body of a function is written within curly braces {}
+=>println and print functions print the their arguments to standard output.
+=>In Koltin ";" is optional.
+.....................................................................................
+Kotlin Program Structure:
+
+Programs are collection of Instructions.
+
+Instructions = (Information + How the information is stored,processed,retrived)
+information is nothing but data.
+
+We need to store data in memory adress, in order to store we need to handle that memory address.
+
+Variables:
+ It is handler to store data.
+
+Data 
+ -Simple data- atomic data -Primitive data
+ eg: 10,char,true or false, decimals 10.45
+
+Any Data can be broken into smaller unit.
+
+Numbers
+  1.whole numbers
+    - binary,oct,hexa 
+  2.Decimal numbers
+     -Float,Double
+
+Abstract Data types:
+  In the begining of programming only basic types were used by languages like numbers, characters.
+
+How to create our own Data type/Type Custom?
+   Custom Types
+
+Struct,Union  - C implementation of Abstract Data types...
+
+Any Abstract/Custom type is built on top of core types.
+
+eg:
+  struct Employee = {numbers,characters}
+ 
+Here Employee is Type called custom type/abstract type
+
+After struct and union in c language, new type construct introduced called "class"
+
+ class Employee {
+   numbers
+   characters
+ }
+
+Type -Data Types
+ -Primitives
+ -Complex/Custom/Reference types
+
+
+Variables:
+  -Holder to hold any type
+
+Literals:
+  -values
+    ->Primitive Literals
+    ->Complex Literals
+
+
+In Kotlin Types are dervided from language language.
+
+Java Primtives:
+1.Numbers
+  -byte,short,int,long
+  -float,double
+2.char
+3.boolean
+
+	"In Kotlin we cant use primtive types directly, rather we have to use always
+	 Reference/complex types only"
+
+
+	In Kotlin every thing is object, Every object type is reference Type.
+.....................................................................................
+
+Varibles:
+
+  Variables are introduced using two keywords
+
+1.var keyword
+2.val keyword
+
+Syntax:
+  var | val | withoutAnyKeyword = variableName:Type = literal(value)
+
+
+fun main() {
+    println("Variables and Values")
+    //int a=10; java syntax
+    var b: Byte = 90 // size is 1 byte
+    var s: Short = 100 //size is 2 bytes
+    var i: Int = 100 // size is byte 4 bytes
+    var lng: Long = 92232323 //size is 8 bytes
+    println("Byte "+b)
+    println("Short " + s)
+    println("Int " + i)
+    println("Long " + lng)
+    
+}
+
+Strings:
+fun main() {
+    var firtName: String = "Subramanian"
+    var lastName: String = "Murugan"
+    println("Name " + firtName + lastName)
+}
+
+Float and Double:
+fun main() {
+    var price: Float = 100.9f
+    var totalPrice: Double = price * 100.89
+    println("Price and Total Price " + price + " ," + totalPrice)
+}
+
+Booleans:
+
+fun main(){
+    var isEnabled:Boolean = true
+    println("IsEnabled " + isEnabled)
+}
+.....................................................................................
+			 Type Inference
+.....................................................................................
+
+The type of the variable is "infered" automatically based on the literals.
+
+Explicit type declaration:
+
+var a:Int =10
+
+Type inference Declaration
+
+var a=10
+
+ Here no type is mentioned explicity : type inference.
+
+fun main() {
+    var a = 10
+    println("A " + a )
+    //a="hello" ; it is invalid
+    var price =10.4
+    println("Price " + price )
+    //price =19.4f it is invalid
+    var status = true
+    println("Status " + status)
+
+}
+
+Kotlin language is "strongly typed/static type language, even though language looks like without type, but type is infered
+....................................................................................
+				Strings
+...................................................................................
+
+String is collection of 16 bit unicode characters
+String is object , so that is reference type
+Strings are declared using "" or """
+
+Strings are concated with + =>> Traditional style.
+
+Kotlin supports the concept called "String Templates" - String interpolation.
+
+ "$Variable" or "${Variable}
+
+When ever you concat strings use always the above syntax.
+
+fun main() {
+    var firstName = "Subramanian"
+    var lastName = "Murugan"
+    println("Name " + firstName + lastName) //traditional way
+    println("Name is $firstName $lastName")
+    println("Name is ${firstName} ${lastName}")
+}
+.....................................................................................
+			Mutli Line Strings
+.....................................................................................
+
+Java style:
+
+fun main() {
+    var doc = "<html>" +
+            "<head>" +
+            "<title>Home</title>" +
+            "</head>" +
+            "<body> </body></html>"
+    print(doc)
+}
+
+Kotlin Style:
+"""
+fun main() {
+    var title = "My Page"
+    var doc = """
+           <html>
+            <head>
+              <title>${title} </title>
+            </head>
+            <body>
+              <h1>Hello</h1>
+            </body>
+            </html>
+        """
+    print(doc)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
