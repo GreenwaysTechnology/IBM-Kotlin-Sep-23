@@ -80,7 +80,7 @@ This spec aim was to introduce new languages for JVM. - Poly Glot languages for 
 		  Birth of new Programming languages for JVM
 .....................................................................................
 
-Based ont this spec , the first language other than java pl was created for JVM - Groovy Programming language.
+Based on this spec , the first language other than java pl was created for JVM - Groovy Programming language.
 .....................................................................................
 
 Top JVM languages today
@@ -129,7 +129,7 @@ if i want to create new programming language, first i need to select any one of 
 A language can follow one style or many styles
 
 if a language follows one style, that language is called "single style language"
-if a language folows many styles , that language is called "Hyibrid style language".
+if a language follows many styles , that language is called "Hyibrid style language".
 
 eg:
  C language follows only one style- Procedural Style, so that we can call c language is procedural language.
@@ -176,7 +176,7 @@ The javascript is dynamic typed
 		Language is classififed based on Program style
 ....................................................................................
 
-Programming langue is classified based on two category.
+Programming language is classified based on two category.
 
 GPL - General Purpose Programming language.
     language is used to build any type of apps using "imperative methodology"
@@ -211,8 +211,8 @@ eg:
 
 Kotlin language is highly multi purpose programming language
  ->To build mobile apps->Multiplatform mobile apps - android and IOS apps
- ->To build server side apps- Microservices, RESTFull aps, Dynamic web apps
- ->To Platform natives apps like C++.
+ ->To build server side apps- Microservices, RESTFull apis, Dynamic web apps
+ ->To build Platform natives apps like C++.
 
 
 Learning Path:
@@ -319,7 +319,7 @@ Literals:
     ->Complex Literals
 
 
-In Kotlin Types are dervided from language language.
+In Kotlin Types are dervided from java language.
 
 Java Primtives:
 1.Numbers
@@ -463,16 +463,375 @@ fun main() {
         """
     print(doc)
 }
+.....................................................................................			    Static Typed language or Dynamic Typed Language
 
 
 
+Static Type:
+ 
+int a =10
+a=100 // valid
+a="hello" // it is invalid: Compile time error
 
 
+Dynamic Typed:
+
+Javascript :
+
+let a =10; // valid - number
+a="Hello" // valid - string
+a=true //valid -boolean
+
+In Groovy: 
+    Groovy is dynamic Typed language
+def  a =10 // valid
+a="Hello"  //valid
+a =true //valid
+
+Kotlin is Language "Strongly typed or Static Typed" language even though language looks like without type, but the type is infered.
+
+fun main() {
+    //def  a =10 :Groovy
+    var a = 10 // here type inference is enabled
+   // a="Hello" //Kotlin: Type mismatch: inferred type is String but Int was expected
+}
+....................................................................................
+			Basic Operators
+.....................................................................................
+
+All Operators supported by Java language Supported by Kotlin as well.
+
+Types of Operators:
+......................
+
+1.Arthimetic Operators
+2.Conditional Operators
+3.Logical Operators
+
+Arthimetic Opertors:
+....................
+fun main() {
+    var a = 10;
+    var b = 20
+    //add
+    var c = a + b
+    println("Add Result $c")
+    c = a - b
+    println("Substract Result $c")
+    c = a * b
+    println("Multiplication Result $c")
+    c = a / b
+    println("Division Result $c")
+    c = a % b
+    println("Mod Result $c")
+    //Augmented Operators
+    var counter = 1
+    counter += 1
+    println("Counter $counter")
 
 
+}
+
+Logical Operators:
+fun main() {
+    var isValid = true
+    var isEnabled = false
+    //&&
+    var result = isValid && isEnabled
+    println("And Operator Result $result")
+
+    result = isValid || isEnabled
+    println("And Operator Result $result")
+}
 
 
+Comparsional operators
+fun main() {
+    var x = 10
+    var y = 20
+    var isEqual = x == y
+    println("Is Equal $isEqual")
+    var str = "hello"
+    var strCp = str
+    var refEqual = str == strCp
+    println("Reference Equal $refEqual")
 
+    //Less than and greater than
+    var isBig = 100 > 200
+    println("IsBig $isBig")
+}
+.....................................................................................
+			Conditional Flow
+....................................................................................
+
+Conditions: if
+
+In Kotlin, "if" is an Expression.
+It can return a value like functions.
+So In Kotlin there is no need for tenary operator :There is no tenary operator 
+(Condition ? truthy:fasly) - Similar construct if expression provides
+(Condition ? then:else)
+
+IF:
+fun main() {
+    var a = 100
+    var b = 20
+    var max = a
+    //Traditional way
+    if (a < b) {
+        max = b
+    }
+    println("Max $max")
+    //Kotlin Expression Style
+    if (a < b) max = b // Here we return max variable : looks like function return value
+    println("Max $max")
+
+}
+
+IF...ELSE:
+.........
+fun main() {
+    //IF ELSE
+    var a = 100
+    var b = 10
+    var max = a
+    //traditional:java style
+    if (a > b) {
+        max = a
+    } else {
+        max = b
+    }
+    println("MAX $max")
+
+    //Kotlin Expression style
+    max = if (a > b) a else b
+    println("MAX $max")
+
+    var isValid = true
+
+    var status = if (isValid) "Valid" else "Invalid"
+    println("Status $status")
+
+}
+
+IF ....ELSE..IF
+fun main() {
+    var a = 100
+    var b = 2
+    var maxLimit = 1
+    var maxOrLimit = if (maxLimit > a) maxLimit else if (a > b) a else b
+    println("maxorMaxLimit is $maxOrLimit")
+}
+
+if condition and block of code:
+.................................
+fun main() {
+    var isEnabled = false
+    var res = if (isEnabled) "Enabled" else "Disabled"
+    println("Result is $res")
+
+    //block of code
+    res = if (isEnabled) {
+        println("Some code")
+        println("some even if more code")
+        //must return value
+        "Enabled"
+    } else {
+        println("some else code")
+        println("some even extra else code")
+        "Disabled"
+    }
+    println("Result is $res")
+}
+.....................................................................................
+				When Expression
+.....................................................................................
+
+When defines a conditional expression with mulitple branches. It is similar to the "switch" statement in c like languages
+
+Syntax:
+
+when(expression) {
+   value 1 -> code 
+   value 2 -> code 
+   value N -> code
+   else -> {
+      code
+   }
+}
+When "matches" its arguments against all branches sequentially until some branch condition is satisfied.
+
+When can be used either as "expression" or as a "statement".
+
+if it is used as an expression, the value of the first matching branch becomes the value of the overall expression.
+
+if it is used as statement,the values of individual branches are ignored.
+
+Just like with "if", each branch can be a block, and its value is the value of the last expression in the block.
+
+The else branch is evaluated if none of the other branch conditions are satisifed.
+
+if "when" is used as an expression, the else branch is mandatory, unless the compiler can prove that all possible cases are covered with branch conditions.
+
+
+Simple When:
+
+Statement Based Syntax:
+........................
+
+fun main() {
+    var x = 1
+    when (x) {
+        1 -> println("X is 1")
+        2 -> println("X is two")
+        10 -> println("X is 10")
+        else -> println("No Match Found")
+    }
+}
+....
+One block can be used to satisfy multiple expressions.
+
+fun main() {
+    var y = 100
+    when (y) {
+        0, 1, 2, 3, 4, 5, 6, 7 -> println("0 to 7 met")
+        8, 9, 10 -> println("8 to 10 met")
+        else -> println("No Match Found")
+    }
+}
+
+I want to write expression to match like
+
+0 to 100
+101 to 1000
+1001 to 10000
+
+There is an operator called "range" operator 
+
+Range Operator:
+
+1..100 - Numerber Range
+a..z - Alphabet Range
+A..Z - Alphabet Range
+
+Simple Range: 
+fun main() {
+    //Type of numbers wouldbe IntRange
+    var numbers = 1..10
+    for (num in numbers) {
+        println("num $num")
+    }
+    var alphabets = 'a'..'z'
+    for (letter in alphabets) {
+        println("letter $letter")
+    }
+}
+
+Note: Advanced Range operations to be discussed later.
+
+fun main() {
+    var x = 600
+    when (x) {
+        in 1..100 -> println("X falls in range of 1 to 100")
+        in 101..1000 -> println("X falls in range of 101 to 1000")
+        else -> {
+            println("X does not fall under the range")
+        }
+    }
+}
+.....................................................................................
+When is used as "Statement":
+
+  var x = 1
+    when (x) {
+        1 -> println("X is 1")
+        2 -> println("X is two")
+        10 -> println("X is 10")
+        else -> println("No Match Found")
+    }
+
+When is used as "Expression":
+............................
+
+var result = when (expression) { 
+     value1 -> "Return"
+     value2 ->  "Return"
+     else -> "Return"
+}
+fun main() {
+
+    //Expression based
+    var isLoggedIn = false
+    var status = when (isLoggedIn) {
+        true -> "Logged In"
+        false -> "Not Logged In"
+    }
+    println("Status $status")
+  
+}
+.....................................................................................
+When with without arg:
+.....................
+fun main() {
+    var num = 3
+    var isEvenOrOdd = when {
+        num % 2 == 0 -> "Even"
+        num % 2 != 0 -> "Odd"
+        else -> "No Match Found"
+    }
+    println("Result is $isEvenOrOdd")
+}
+....................................................................................
+				Loops
+...................................................................................
+
+1.for loop
+2.range 
+3.while
+4.do..while
+
+1.For loop:
+............
+
+The for loop iterates through anything that provides iterator.
+This is eq to C#, or Iterators in java.
+
+Syntax:
+ for(item in collection) statement
+ 
+The body of for can be a block also.
+  for(item:Type in collection){
+    //block
+  }
+ 
+eg:
+
+fun main(){
+    for(item in 1..100){
+        print("${item}, ")
+    }
+}
+
+Ranges:
+fun main() {
+    //simple range
+    for (i in 1..10) {
+        print(i)
+    }
+    println("\n")
+    //Reverse order
+    for (j in 10 downTo  1) {
+        print(j)
+    }
+    //increment by 2
+    for(counter in 1..100 step 2) println(counter)
+
+    //until
+    for(counter in 5 until 10) println(counter)
+}
+
+While and do while remain same like c/c++/java 
+.....................................................................................	
 
 
 
