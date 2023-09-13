@@ -832,6 +832,417 @@ fun main() {
 
 While and do while remain same like c/c++/java 
 .....................................................................................	
+				Functions
+....................................................................................
+
+What is function?
+  The term function is derived from the mathmetics.
+  The function represents unit of Execution.
+  The Function is building block of computer sytem itself
+
+Types of functions with respect to declaration and execution
+1.Passive function
+2.Active function
+
+Every Program is running on Runtime which itself is another program.
+
+Every java program is running on JVM Which is another Program.
+
+JVM is written in C language.
+
+According to OS, JVM is just process.
+
+Every Process has three segments(memory Area)
+
+1.Heap
+2.Stack
+3.Program Data/Method Area
+
+Program data/Method Area:
+........................
+It is memory segement where all "Passive Instructions" of the Program stored.
+All functions are stored/initalized in this area.
+All Static variables are initalized inside method area.
+All literals(values)  are initalized inside constant pool of method area.
+
+...................................................................................
+			 Runtime representation of functions
+...................................................................................
+
+In Programs runtime Representation means, which should be accessed by CPU.
+If any instructions needs to be accessed by CPU means, it should be available inside Main Memory.
+
+Every function must be allocated on RAM, So that it can be accessed by CPU...
+
+Declaration 
+fun main(){ }
+
+Function declaration means which is avilable as part of Method area
+
+Execution: Allocating Memory on RAM
+main() --->We have to allocate memory on RAM ----?
+
+When the function is called, that function is pushed into "Stack".
+
+Stack is simple Last In First Out Datastructure.
+
+Once the function gets pushed into Stack,the Runtime allocates memory on RAM.
+
+Stack Framework:
+ Stack Framework is nothing but , the runtime representation of every function.
+ Stack Framework contains instructions like local variables,Stack Begining  pointer,Return address from where the function gets called.
+  
+Stack Frames are executed sequentially by default.
+
+hello()--->pushed into stack---creates Frame---running frame----frame returns--frame is removed from main Memory.
+
+.....................................................................................
+			Kotlin functions
+...................................................................................
+
+Kotlin supports different types of functions
+
+1.normal function
+2.infix function
+3.local function
+4.member function
+5.Tail Recursive function
+6.inline functions
+7.suspend functions
+8.operator functions
+9.lambda functions
+
+1.Normal Functions
+ ->How to declare
+ ->How to invoke
+ ->Args and Parameters
+ ->Return values and types
+ ->Types and Parameters
+
+Every kotlin programs begins with main function, which is called by runtime.
+
+
+Basic Function Declaration:
+fun main() {
+    println("main function starts")
+    hello()
+    println("main function ends")
+}
+
+//function declaration
+fun hello() {
+    println("hello")
+}
+
+Function with some kind of Logic:
+.................................
+//function declarations
+fun add() {
+    var a = 10
+    var b = 20
+    var c = a + b
+    println("C $c")
+}
+
+fun multiply() {
+    var a = 10
+    var b = 20
+    var c = a * b
+    println("C $c")
+}
+
+fun main() {
+    add()
+    multiply()
+}
+.....................................................................................
+			Functions args and parameters
+.....................................................................................
+
+Args are place holders which hold values(literals)
+Parameters are values/literals which to be passed to the function.
+
+Simple Args and Parameters:
+...........................
+
+//args
+//message is argument
+fun sayHello(message: String) {
+    print(message)
+}
+
+fun main() {
+    //Hello is parameter
+    sayHello("Hello")
+}
+
+
+Function args and params with Logic;
+....................................
+fun add(a: Int, b: Int) {
+    var c = a + b
+    println("Add Result is $c")
+}
+
+fun multiply(a: Int, b: Int) {
+    var c = a * b
+    println("Multiply Result $c")
+}
+
+fun main() {
+    add(10, 10)
+    multiply(10, 10)
+}
+
+..................................................................................
+			Advanced Parameters and Args - Default Args
+................................................................................
+
+Use case: passing all Parameters to the function
+ Note: by default you cant miss any parameters
+import java.text.Normalizer
+
+fun format(
+    str: String,
+    normalizeCast: Boolean,
+    upperCaseFirstLetter: Boolean,
+    wordSeparator: Char
+) {
+
+    println(
+        "str $str normalizeCast $normalizeCast  upperCaseFirstLetter" +
+                " $upperCaseFirstLetter wordSeparator $wordSeparator"
+    )
+
+}
+
+fun main() {
+    format("hello", true, false, ',')
+}
+
+Here
+ format("hello", true, false, ',') you are passing all parameters
+
+....
+
+Default Args:
+
+//Defalut args
+fun format(
+    str: String = "Default Str",
+    normalizeCast: Boolean = false,
+    upperCaseFirstLetter: Boolean = false,
+    wordSeparator: Char = '.'
+) {
+
+    println(
+        "str $str normalizeCast $normalizeCast  upperCaseFirstLetter" +
+                " $upperCaseFirstLetter wordSeparator $wordSeparator"
+    )
+
+}
+
+fun main() {
+    format("hello", true, false, ',')
+    format("hai")
+    format()
+}
+.....................................................................................
+			 Named Paremeters
+..................................................................................
+
+By default , Parameters are passed based on Positions called "Positional Parameters"
+
+fun add(a:Int,b:Int){
+
+}
+here you have to pass parameters based on postions like "a" must be passed in first and "b" must be passed second
+
+add(10,20) (a,b)
+
+In Kotlin you can change the positions of parameters called "Named Parameters".
+
+fun format(
+    str: String = "Default Str",
+    normalizeCast: Boolean = false,
+    upperCaseFirstLetter: Boolean = false,
+    wordSeparator: Char = '.'
+) {
+
+}
+Here i want to pass only word separator , the rest of the values should be default one.
+//Defalut args
+fun format(
+    str: String = "Default Str",
+    normalizeCast: Boolean = false,
+    upperCaseFirstLetter: Boolean = false,
+    wordSeparator: Char = '.'
+) {
+
+    println(
+        "str $str normalizeCast $normalizeCast  upperCaseFirstLetter" +
+                " $upperCaseFirstLetter wordSeparator $wordSeparator"
+    )
+
+}
+
+fun main() {
+    //Positional Parameters
+    format("hello", true, false, ',')
+    format("hai")
+    format()
+
+    //Named parameters
+    format(wordSeparator = ':')
+    format(str = "How are you", upperCaseFirstLetter = true, wordSeparator = ';')
+}
+....................................................................................
+			   How to return values from the function
+....................................................................................
+
+In Kotlin function returns Object.
+if function does not return any thing, It returns by default One Object called "Unit"
+Unit is Type with only one Value -Unit.
+Unit value does not have to be returned explicitly.
+
+Unit:
+
+fun doStuff(): Unit {
+    println("This function does not return any thing")
+}
+
+fun main() {
+    var res = doStuff()
+    println(res)
+}
+
+Other Return Types: Int,String,Boolean,Anything....
+
+
+fun calculate(a: Int = 0, b: Int = 0): Int {
+    return a + b
+}
+
+fun sayMyName(name: String = "Default Name"): String {
+    return name
+}
+
+fun main() {
+    var res = calculate(b = 10, a = 30)
+    println("Calcualte Result $res")
+    var name = sayMyName(name = "Subramanian")
+    println("Name $name")
+}
+....................................................................................
+			  Single-Expression Functions
+.....................................................................................
+
+When a function returns a single expression, the curly braces can be omitted and the body is specified after = symbol.
+
+Normal Function:
+fun sum(a: Int = 0, b: Int = 0): Int {
+    return a * b
+}
+
+fun main() {
+    println(sum(a = 90, b = 89))
+}
+
+/**
+ * Normal function
+fun sum(a: Int = 0, b: Int = 0): Int {
+return a * b
+}
+ **/
+//Single Expression Function
+//Here we can omit curly braces and return statement.
+fun sum(a: Int = 0, b: Int = 0): Int = a * b
+fun getStock(value: Double): Double = value
+
+//Here even we can omit return Type: Type Inference is enabled
+fun double(x: Int) = x * 2
+fun main() {
+    println(sum(a = 90, b = 89))
+    println(getStock(value = 10.89))
+    println(double(x = 10))
+}
+
+Note:
+Explicit Return types
+
+1.Functions with block body must always specify return types explicitly,unless it's intended for them to return "Unit", in which case specificing the return type is Optional.
+
+2.Kotlin does not infer return types for functions with block bodies because such functions may have complex control flow in the body, and the return type will be non obvious to the reader.
+....................................................................................
+				Null
+....................................................................................
+What is null?
+  Null itself is value, Its type is Object.
+  Null itslef is object.
+
+History Of Null:
+  In computing, a null pointer or null reference is a value saved for indicating that the pointer or reference does not refer to a valid object(value).
+
+In 2009, Tony Hoare stated[15] that he invented the null reference in 1965 as part of the ALGOL W language. In that 2009 reference Hoare describes his invention as a "billion-dollar mistake":
+
+reference: https://en.wikipedia.org/wiki/Null_pointer
+.....................................................................................
+			How to handle Null?
+
+"Null" Reference is unavoidable in any Object Oriented Systems like c++,java,C#,Kotlin etc...
+
+Handling null is more challange
+
+How to handle null very safely?
+
+Kotlin like languages handles null very effieciently without crashing the system with minimual , declarative code.
+
+Kotlin handles null positively, if there is null, we can give alernate values.
+
+How null is handled in java?
+ In java, the methods,properties  access are verified during compile time.
+ Invocations are verified during runtime only.
+ if there is any null reference, jvm throws error during runtime.
+ null cant be verified during compile time.
+
+
+public class NullDemo {
+    public static void main(String[] args) {
+        String str = null;
+        System.out.println(str.length());
+    }
+}
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "String.length()" because "str" is null
+	at NullDemo.main(NullDemo.java:5)
+
+In Kotlin "null" is verified during "Compile" time,So that Your code will be more safer during Development.
+Most of the null reference bugs can be identified
+.....................................................................................
+
+ 
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
