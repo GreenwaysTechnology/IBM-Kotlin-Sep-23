@@ -2,6 +2,10 @@
 public class NullDemo {
     public static void main(String[] args) {
         String str = null;
-        System.out.println(str.length());
+        if (str != null) {
+            System.out.println(str.length());
+        } else {
+            System.out.println("There is no object");
+        }
     }
 }

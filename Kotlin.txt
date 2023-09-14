@@ -838,7 +838,7 @@ While and do while remain same like c/c++/java
 What is function?
   The term function is derived from the mathmetics.
   The function represents unit of Execution.
-  The Function is building block of computer sytem itself
+  The Function is building block of computer system itself
 
 Types of functions with respect to declaration and execution
 1.Passive function
@@ -1000,7 +1000,6 @@ fun main() {
 
 Use case: passing all Parameters to the function
  Note: by default you cant miss any parameters
-import java.text.Normalizer
 
 fun format(
     str: String,
@@ -1219,25 +1218,580 @@ In Kotlin "null" is verified during "Compile" time,So that Your code will be mor
 Most of the null reference bugs can be identified
 .....................................................................................
 
+In java null is handled
+
+A a =null
+
+if(a!=null){ 
+   do
+}else{ 
+  dont do
+}
+
+public class NullDemo {
+    public static void main(String[] args) {
+        String str = null;
+        if (str != null) {
+            System.out.println(str.length());
+        } else {
+            System.out.println("There is no object");
+        }
+    }
+}
+
+Kotlin and Null:
+..................
+
+1.Kotlin variables never allows null by default.
+
+fun main(){
+    var message:String =null
+}
+This code cause compile time error
+ "Null can not be a value of a non-null type String"
+
+fun main(){
+    var message:String=""
+    message = null 
+}
+This code also causes error.
+
+Sometimes we cant avoid having null values.
+How does we declare "null" in Kotlin?
+
+You can declare variable "nullable" - variable can have null.
+
+Synatax:
+  var variableName:Type? = null
+
+Eg:
+fun main() {
+    //var message:String=""
+    // message = null
+    var message: String? = null
+    println(message)
+}
+.....................................................................................
+		 What if I access any property on null Reference
+....................................................................................
+
+fun main() {
+    var message: String? = null
+    println(message.length)
+}
+You will compile time error if you access any property on "null" object.
+
+"Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type String?"
+
+Ways to Handle null Reference
+..............................
+
+1.Java Style : using if and notNull 
+fun main() {
+    var message: String? = null
+    //println(message.length)
+    //message="hello"
+    //way 1: java style
+    if (message != null) {
+        println("Message Size is ${message.length}")
+    } else {
+        println("Message Size is having null value")
+    }
+}
+
+2.Kotlin Style: Using there is operator "Safe Navigation Operator"
+?. - SafeNavigation Operator.
+
+var message:String? = null
+println("Message Size Using Safe Navigation Opertor ${message?.length}")
+
+if the variable is having null reference, The output would be "null"  
+if the variable is having value, The output would be "value"
+
+fun main() {
+    var message: String? = null
+    //println(message.length)
+    //message="hello"
+    //way 1: java style
+    if (message != null) {
+        println("Message Size is ${message.length}")
+    } else {
+        println("Message Size is having null value")
+    }
+    //Way 2: Kotlin Sytle : Using SafeNavgiation Operator
+    println("Message Size Using Safe Navigation Opertor ${message?.length}")
+
+}
+output:
+Message Size is having null value
+Message Size Using Safe Navigation Opertor null
+
+3.Kotlin Sytle:Using Elvis Operator
+  If there is null in output, it would be replaced with some default value, that means some meaningfull default values
+
+var result = variableName?.property ?:defaultValue
+
+fun main() {
+    var message: String? = null
+    //Way 3:Kotlin Style: Using Elvis Operator
+    var length = message?.length ?: 0
+    println("Message Size Using Elvis Operator ${length}")
+
+}
+output:
+Message Size Using Elvis Operator 0
+
+4.Kotlin Style: Producing RuntimeException using NotNull Assertion Operator(!!)
+
+  For Some Reasons, if you want "RuntimeException" to be thrown by the code
+  How to throw RuntimeException.
+  
+Syntax:
+ Variable!!.Property
+
+fun main() {
+    var message: String? = null
+    //Way 4: Kotlin Style:Using Not Null Assertion Operator(!!)
+    println("Message Size using Not Null Assertion Operator ${message!!.length}")
+
+}
+output:
+Exception in thread "main" java.lang.NullPointerException
+	at KotlinNullAccessKt.main(KotlinNullAccess.kt:19)
+	at KotlinNullAccessKt.main(KotlinNullAccess.kt)
+
+
+Safe Cast and Collections and Null : To be discussed later.
+.................................................................................
+				Functions,Null and Nullable
+...................................................................................
+
+Parameters and Null:
+
+
+fun save(name: String? = "", city: String? = "", age: Int? = 1) {
+    println("${name?.uppercase() ?: "Name".uppercase()} ${city?.uppercase() ?: "City".uppercase()} ${age ?: 1}")
+}
+
+fun main() {
+    save(name = "Subramanian", city = "Coimbatore", age = 43)
+    save(name = null, city = null, age = null)
+}
+
+Return Type and Null:
+fun find(): String? {
+    //return "find";
+    return null
+}
+
+
+fun main() {
+    println(find() ?: "empty")
+}
+.....................................................................................
+				Functional Programming
+.....................................................................................
+
+What is Functional Programming?
+  Functional Programming is one of the programming style for building apps.
+
+History of Functional Programming:
+..................................
+
+Functional Programming principles and patterns implemented from the "Mathmetics" called "Lambda Calculs".
+
+Lambda calculus (also written as λ-calculus) is a formal system in mathematical logic for expressing computation based on function abstraction and application using variable binding and substitution.
+
+It is a universal model of computation that can be used to simulate any Turing machine.
+
+It was introduced by the mathematician Alonozo Church in the 1930s as part of his research into the foundations of Mathmetics.
+
+"Turning Machine"  is abstract computer which talks about how to "mutate state" / "Manipulate state".
+
+What is meaning of Function according to "Lambda Calculs"?
+
+  Function means "Unit of Computation" - Having expressions and variables and its values
+
+f = {
+  c = a + b
+}
+
+Functional Programming is the implementation of "Lambda Calculs" theorems...
+
+The languages which implements "lambda Calculs" We call "functional programming language".
+
+The first functional Programming language introduced in 1950's 
+=>Lisp - First Appeared in 1960.
+
+Based on Lisp language many languages were created
+
+Most popular languages today
+1.java script
+2.Kotlin,scala,java 8
+etc...
+
+Principles of Functional Programming(Lambda Calculs):
+.....................................................
+
+1.Pure functions
+  1.1.Side Effects,Immutability
+2.Functions are first Class citizens 
+  2.1.Higher order functions
+3.Referential Transparency
+4.Recursive functions rather than loops
+
+All priniciples may not be used in all languages.
+
+if a language implements all principles "The language is called "pure functional" Programming language
+
+if a language does not implement all principles The language is called "functional style" Programming language
+
+
+		"Kotlin is functional style language"
+
+
+Kotlin functional programming implementations:
+
+1.Function is first class citizens:
+....................................
+
+ Firt class means "special"
+
+ -> Functions are passed around (in,out)
+  
+ This means the language supports passing function as arguments to other functions 
+   -In
+ Returning functions from other functions as "values"
+  -Out
+
+ Assigning functions into variables or stroing them inside data structures.
  
+var a:Int =100
+ 
+ a- is variable
+ Int is data type
+ 100 is literal
+
+Similar to 100 we can assign or treat functions..
+
+According to functional Programming "function is literal /value" like int,double,string.
+
+var variableName = fun myFun(){}
+
+ "Kotlin functions are first class citizens, which means that they can be stored into variables, passed inside ds, as parameter, return them from other functions".
+
+Higher Order Functions:
+.......................
+	First class functions are necessity for the functional programming style,in which the use of higher order functions is a standard practice.
+
+In Mathmetics and Computer Science, a higher order function is a function that does the following things
+
+1.takes one or more functions as arg
+2.returns a function as its result.
+
+Can i say this function is higher order fun?
+
+fun map(){
+
+}
+ No, Because  it does not follow the thumb rule of higher order functions.
+.....................................................................................
+			Kotlin and functional programming implementations
+.....................................................................................
+
+Since Kotlin Static typed language, We need to tell the "Type of Itself"
+
+fun map(FunctionType){
+
+}
+
+In kotlin , every thing is Object, FunctionType itself is Object behind the Scene
+...................................................................................
+			 Kotlin Functions types
+...................................................................................
+
+1.(T)->T
+ eg:
+  (Int)->Int
+  (Int)->String
+2.(T1,T2)->T3
+  (Int,Int)->Int
+  (Int,Int)->String
+3.(T)->Unit
+  (T)->Unit
+  ()->Unt
+
+fun map((T)->T) {
+
+}
+fun map((T1,T2)->T3) {
+
+}
+fun map((T)->Unit) {
+
+}
+Rules:
+1.All Function types have a parenthesized type list and return type.
+  (A,B)->c
+
+2.Function type can Optionally have an additional "Receiver" Type,
+  Which is represented a dot in the notation.
+ 
+   "ReceiverObject".(B,C)->D
+eg
+    A.(B,C)->D
+
+ A => Receiver Object
+ B,C=>Args
+ D=>Return Type
+
+3.In case of async programming, in order to represent "callbacks/listeners" functions are represented as suspend function.
+
+suspend (A,B)->D
+suspend A.(B,C)->D
+
+eg:
+  (a:Int,b:Int)->Int
+
+Here no variables are nullable, what if i want nullable representation..
+
+((A,B)->C)?
+(A.(B,C)->D)?
+
+Function declaration with variables
+
+action:()->Unit
+
+ action is just variable
+ ()->Unit - Function type
+
+Function Literals:
+..................
+  In functional Programmings "function are values/literals/expressions", can be stored into a variable.
+  Since functions are stored into variables, that variables can be used to invoke that function.
+ 
+   var hello: () -> Unit = fun() {
+        //function body
+        println("Hello function literal")
+    }
+Here 
+=> hello is just variable
+=> ()->Unit is Data type , the type of Function
+=> fun(){} -It is value
+
+Here you can note down there is no name for function , if function has no name called "Anonyous Functions (functions without name)"
+
+eg:
+fun main() {
+    var a: Int = 10
+    //var is keyword
+    //a is variable
+    //Int is type
+    //10 is literal(value)
+
+    //hello is variable
+    //var is keyword
+    //()->Unit is type: function type
+    //fun(){} - literal/value
+    var hello: () -> Unit = fun() {
+        //function body
+        println("Hello function literal")
+    }
+    //invoke function :using variable called hello
+    hello()
+}
+
+Type Inference and Function literals:
+.....................................
+Type inference is allowed with function types
+
+fun main() {
+    //Type Inference with function literals
+    var hai = fun() {
+        //function body
+        println("Hai function literal")
+    }
+    hai()
+}
+
+Function literals with Args and Parameters
+.........................................
+
+1.With Explicit Type
+fun main() {
+    //fun with args and parameters
+    var add: (Int, Int) -> Int = fun(a: Int, b: Int):Int {
+        return a + b
+    }
+    println(add(10,10))
+}
+2.With Type Inference
+fun main() {
+    var substract = fun(a: Int, b: Int): Int {
+        return a - b
+    }
+    println(substract(10, 8))
+}
+
+3.With default Values
+fun main() {
+    //fun with args and parameters
+    var add: (Int, Int) -> Int = fun(a: Int= 0, b: Int = 0): Int {
+        return a + b
+    }
+    println(add(10, 10))
+    println(add())
+
+    var substract = fun(a: Int=0, b: Int=0): Int {
+        return a - b
+    }
+    println(substract(10, 8))
+}
+
+Note: 
+ You will get compile time error.
+
+ "An anonymous function is not allowed to specify default values for its parameters"
+
+Nullable and Anonymous Functions
+.................................
+fun main() {
+    //What if the paremeter is nullable
+    var accept: ((String) -> String)? = fun(message: String): String {
+        return message ;
+    }
+    println(accept("Hello"))
+    println(accept(null))
+}
+
+This code causes compile time error
+
+"Reference has a nullable type '((String) -> String)?', use explicit '?.invoke()' to make a function-like call instead"
 
 
+if function literal is called with nullable, you cant call directly.
+
+We have patterns to call function literals with Nullable
+
+Pattern 1: "Surround with Null Check"
+fun main() {
+    //What if the paremeter is nullable
+    var accept: ((String) -> String)? = fun(message: String): String {
+        return message;
+    }
+//    println(accept("Hello"))
+//    println(accept(null))
+    //Pattern 1: "Surround with Null Check"
+    if (accept != null) {
+        println(accept("Hello"))
+    }
+}
+
+Pattern 2: There is method called "Invoke",along with "Safe Navigation Operator".
+
+ println(accept.invoke("Hell Invoke"))
+Compile Time Error:
+
+Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type ((String) -> String)?
+
+fun main() {
+    //What if the paremeter is nullable
+    var accept: ((String) -> String)? = fun(message: String): String {
+        return message;
+    }
+    println(accept?.invoke("Hell Invoke"))
+}
+
+Nullable For Indiduval Parameters and Returns
+.............................................
+fun main() {
+
+    var display: (String?) -> String? = fun(message: String?): String? {
+        return message ?: "Default"
+    }
+    println(display?.invoke("Hello"))
+    println(display?.invoke(null))
+
+    var showMyName: (String?, String?) -> String? = fun(name: String?, message: String?): String? {
+        return "$message $name"
+    }
+    println(showMyName?.invoke("Subramanian", "Hello"))
+    println(showMyName?.invoke(null, null))
+
+}
+
+The Nullable with Receiver Object
+
+(receiverObject.(String?, String?) -> String?)?
 
 
-   
+Type Inference with Nullable Function type:
+..........................................
+fun main() {
+
+   //Type inference simplifies the function types
+    var show = fun(name: String?, message: String?): String? {
+        return "$message $name"
+    }
+    println(show?.invoke("Subramanian", "Hello"))
+    println(show?.invoke(null, null))
+
+}
+.....................................................................................
+			   Higher order functions
+.....................................................................................
+
+=>Function as Parameter to another function
+=>Function as return value from another function
 
 
+Function as Parameter:
+......................
+
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
+
+fun main() {
+  print(add(10,10))
+}
+
+Here we can see that function called "add" accepts two numbers
+
+a is variable which type is Int
+b is variable which tpe is Int.
+
+Similar to 10 , We consider function as parameter
+
+Basic Higher Order Function
+fun add(a: Int, b: Int): Int {
+    return a + b
+}
 
 
+//Higher order function:
+fun sayGreet(action: () -> Unit) {
+    action()
+}
 
+fun main() {
+    //passing hard coded value
+    println(add(10, 10))
+    var x = 10
+    var y = 20
+    //passing variables
+    println(add(x, y))
 
+    var greet: () -> Unit = fun() {
+        println("Greet")
+    }
+    sayGreet(greet)
+    //passing anonmous function as parameter directly
+    sayGreet(fun() {
+        println("Greet anonymous")
+    })
 
-
-
-
-
-
-
+}
 
 
 
