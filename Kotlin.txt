@@ -1792,6 +1792,592 @@ fun main() {
     })
 
 }
+............................................
+
+Function as Parameter with Args and Parameters:
+...............................................
+fun adder(action: (Int, Int) -> Unit) {
+    action(10, 10)
+
+}
+
+fun main() {
+    adder(fun(a: Int, b: Int) {
+        var result = a + b
+        println("The Result is ${result}")
+    })
+}
+...
+
+Function as Parameter with Args and Parameters with Nullable:
+
+Note: 
+ When you do numerical compuation against nullable values, you can use still safe Navigation Operator or elvis operator, for this eg i am going to use "java style" null check, that concept we will see later.
+
+fun adder(action: (Int?, Int?) -> Unit) {
+    action(10, 10)
+    action(null, null)
+
+}
+
+fun main() {
+    adder(fun(a: Int?, b: Int?) {
+        if (a != null && b !== null) {
+            println(a + b)
+        } else {
+            println("Values are null ")
+        }
+
+    })
+}
+
+OUtput:
+20
+Values are null
+
+...
+Default Values : 
+
+The below code cause compile time error, because anonymous functions cant have default value
+
+fun adder(action: (Int?, Int?) -> Unit) {
+    action(10, 10)
+    action(null, null)
+    //action()
+
+}
+
+fun main() {
+    adder(fun(a: Int?=0, b: Int?0) {
+        if (a != null && b !== null) {
+            println(a + b)
+        } else {
+            println("Values are null ")
+        }
+
+    })
+}
+........................................
+
+How to pass more functions as parameter?
+
+->Nullable
+->Default values including default functions
+
+fun login(
+    userName: String? = "admin",
+    password: String? = "admin",
+    resolve: ((String?) -> Unit?)? = fun(status) {
+        println(status)
+    },
+    reject: ((String?) -> Unit?)? = fun(err) {
+        println(err)
+    }
+) {
+
+    if (userName === "admin" && password == "admin")
+        if (resolve != null) {
+            resolve("Login Success")
+        }
+    else
+        if (reject != null) {
+            reject("Login Failed")
+        }
+
+}
+
+fun main() {
+    login(
+        userName = "admin",
+        password = "admin",
+        fun(status) {
+            println(status)
+        },
+        fun(err) {
+            println(err)
+        }
+    )
+
+    login(
+        userName = "foo",
+        password = "bar",
+        fun(status) {
+            println(status)
+        },
+        fun(err) {
+            println(err)
+        }
+    )
+    login()
+    login(null,null,null,null)
+}
+.....................................................................................
+
+Can Parameter function return any value to caller?
+
+Yes
+fun connect(action: (status: Boolean) -> String) {
+    var result = action(true)
+    println(result)
+}
+
+fun main() {
+    connect(fun(status: Boolean): String {
+        println(status)
+        return "Connected";
+    })
+}
+.....................................................................................
+			Higher order functions and "Lambdas"
+.....................................................................................
+
+What is Lambda?
+  Lambda terminalogy is derived from "Lambda calculs"
+
+"Lambdas are function literals only, can be assigned to a variable, passed around(in and out)
+
+In order to implement functional programming, we can use lambdas which simplifies the coding even better way.
+
+How to declare lambda expressions?
+
+var | val variableName:FunctionType = { arg ->functionBody }
+
+Rules:
+
+1.A lambda expression is always surrounded by Curly braces
+2.Parameter declarations in the full synatactic form go inside curly braces and have optional type annotations.
+3.The body of the function will after -> (arrow) notation only
+
+4.The infered return tpe is not "Unit" by default, The last line (possible)   expression inside lambda is treated as the return value.
+
+5.Lambads can be passed as parameter to another function or another Lambda 
+
+Different way of writing functions
+
+1.normal function
+2.function expression: if function has only one line of returned code
+3.function as literal
+4.function as lambda
+
+
+//normal function
+fun myadd(a: Int = 1, b: Int = 1): Int {
+    return a + b
+}
+
+//single function expression
+fun addExpression(a: Int = 1, b: Int = 1) = a + b
+
+//function literal
+var addFun = fun(a: Int, b: Int): Int {
+    return a + b
+}
+var addLambda = { a: Int, b: Int ->
+    //return
+    a + b
+}
+
+fun main() {
+    println(myadd(10, 10))
+    println(addExpression())
+    println(addFun(1, 3))
+    println(addLambda(10,10))
+}
+.....................................................................................
+
+Lambda With biz logic:
+var loginLambda = { userName: String, password: String ->
+    if (userName == "admin" && password == "admin") "Login Success" else "Login failed"
+}
+
+fun main() {
+    println(loginLambda("admin", "admin"))
+}
+.......
+
+How to pass lambda as parameter to function or lambda?
+
+//function that accepts lambda as parameter
+//no args and no return
+fun greeter(action: () -> Unit) {
+    action()
+}
+
+fun hello(action: (String) -> Unit) {
+    action("Hello!!!")
+}
+
+fun hai(action: (String) -> String) {
+    var res = action("Hai, How are you?")
+    println(res)
+}
+
+fun main() {
+    greeter({ println("hello") })
+    greeter({
+        println("hello")
+        println("hello")
+        println("hello")
+        println("hello")
+        println("hello")
+        println("hello")
+    })
+    //lambda tha takes args
+    hello({ message: String ->
+        println(message)
+    })
+    hai({ message ->
+        message
+    })
+}
+
+...
+
+Lambda Accepts another lambda as parameter:
+...........................................
+fun main() {
+    //Lambda accepts another lamabda as parameter
+    var greet = { action: () -> Unit ->
+        action()
+    }
+    greet({
+        println("Lambda")
+    })
+    //Lambda accepts another lamabd as parameter which pass some value to the caller lambda
+    var add = { action: (Int, Int) -> Int ->
+        println(action(10, 10))
+    }
+    add({ a: Int, b: Int ->
+        a + b
+    })
+}
+.............................
+Code Refactoring:
+   Lambda argument should be moved out of parentheses:
+
+With paraentheses:
+ add({ a: Int, b: Int ->
+        a + b
+    })
+
+Without paraentheses:
+ add { a: Int, b: Int ->
+        a + b
+    }
+
+fun main() {
+    //Lambda accepts another lamabda as parameter
+    var greet = { action: () -> Unit ->
+        action()
+    }
+    greet {
+        println("Lambda")
+    }
+    //Lambda accepts another lamabd as parameter which pass some value to the caller lambda
+    var add = { action: (Int, Int) -> Int ->
+        println(action(10, 10))
+    }
+    add { a: Int, b: Int -> a + b }
+}
+.......................
+Passing more lambda parameters:
+...............................
+fun main() {
+    var login = { userName: String,
+                  password: String,
+                  resolve: (String) -> String,
+                  reject: (String) -> String ->
+        if (userName === "admin" && password === "admin")
+            resolve("Login success")
+        else
+            reject("login failed")
+    }
+    //invoke lambda
+    login(userName = "admin",
+        password = "admin",
+        { status -> println(status) },
+        { err -> println(err) }
+    )
+}
+....................................................................................
+			it - Variable
+...................................................................................
+"it" is implicit variable can be used in "lambda"  to replace single explcit arg functions
+fun main() {
+    //If lambda has single arg and parameter
+    var sayMyName = { name: String ->
+        name.uppercase()
+    }
+    println(sayMyName("subramanian"))
+
+    //without variable name
+    var sayYourName: (String) -> String = {
+        it.uppercase()
+    }
+
+
+}
+.....................................................................................
+				DSL - Domain Specific language
+...................................................................................
+
+What is DSL?
+  More Readable code english like statement.
+  Kotlin suports building DSL syntax.
+
+1.When we pass lambda as parameter to  the function, we can ommit ()
+
+  //Lambd skips ()
+
+   delay {
+	println ("DSL Task")
+   }
+...................................................................................
+			 DSL and Higher order function
+
+if functions/lambda takes args like String/Int,FunctionType
+import kotlin.concurrent.thread
+
+fun main() {
+    println("dsl code")
+    var mytask = { action: () -> Unit ->
+        action()
+    }
+    mytask { println("DSL TASK") }
+
+    var compute = { no: Int, action: () -> Unit ->
+        println("$no")
+        action()
+    }
+
+    fun filterBy(order: String = "asc", name: String = "name", no: Int = 0, action: () -> Unit) {
+        println("Order ${order} name ${name} no ${no}")
+        action()
+    }
+
+    //normal syntax
+    compute(10, { println("hello") })
+    //when pass lambda as second parameter or last last parameter, the first parameters can be
+    //enclosed with in () and second parameter(lambda) can be passed directly
+    compute(10) { println("computed") }
+
+    //explicit values
+    filterBy(order = "desc", name = "Subramanian", no = 100) { println("Hello") }
+    //with default value
+    filterBy { println("How are you") }
+    //even though function is last you can pass even first parameter
+    filterBy(action = { println("Hello") }, order = "desc", name = "Subramanian", no = 100)
+
+    //SOme built in Kotlin functions are higher order functions with lambda
+    thread(name = "My thread", start = true) {
+        println("Current Thread ${Thread.currentThread().name}")
+    }
+    thread {
+        println("Current Thread ${Thread.currentThread().name}")
+    }
+}
+.....................................................................................
+		   Best Practices Designing with Lambda
+.....................................................................................
+
+we can use lambda at places of function calls any where, but it does not give DSL Syntax.
+
+if you want DSL coding, pass lambda always last parameter
+....................................................................................
+			Can we skip lambda args
+...................................................................................
+
+Yes we can skip lambda args using "_" notation instead of name.
+fun doCompute(a: Int = 10, b: Int = 10, action: (Int, Int) -> Unit) {
+    action(a, b)
+}
+
+fun main() {
+    doCompute { _, b -> println("$b") }
+    doCompute(b = 90) { _, b -> println("$b") }
+}
+....................................................................................
+	   Object oriented Programming and Implementations
+...................................................................................
+What is Object orientation?
+
+  The Object orientation is way or style of building applications.
+
+if you look at any programming language, there are two things
+
+1.data
+2.How that data can be operated upon
+
+Program= {Data + actions/operations}
+
+Before OO
+  data and operations are completly isloated -Procedural programmings
+
+if many operations operate on data, which lead inconsistency,data corrpution,data duplication
+
+1970's White paper was published regarding this, How to organize the data based on problem domain - real world.
+
+We need to map the data according to realworld problems what we solve using programs and machines.
+
+Birth of Abstract data type:
+............................
+Create new Type based on core types
+
+core types
+ numbers,characters
+ numbers - very very core
+
+Language types
+  int ,short,byte,long,float,double -primitive types
+
+NewType = {int ,float,char,double}
+ |
+Abstract Data Type 
+
+Implementation of Abstract data type theory:
+............................................
+
+In c language, abstract data type theory were implemented via notations.
+
+1.struct
+2.union
+ These notations group data and its operations into a logic unit.
+
+class
+  The word class is dervied from "Clause" - Grouping of things(data + operations)
+
+Based on this notation, c language introduced a concept called "C with Classes"
+the later it led a new Programming language style and implementation
+ - object oriented programming.
+
+OO talks about hwo to organize data and its operations togther.
+
+Object | class = { data + operations}
+
+Object is runtime represenation where as class is compile time representation.
+
+Based on classes and Object, principles were published
+
+Object oriented Concepts:
+
+1.Abstraction
+2.Encapsulation
+3.Typing
+4.Hierachy
+5.Modularity
+...................
+6.Concurency
+7.Persistency
+
+Abstraction:
+   It talks about how to collect data from the real world problem domain "Object"
+
+Abstraction says how to extract "Necessary data" from the object on Given context.
+
+eg:
+  if you take Mr x
+He goes to bank, What type of information banker needs?
+Mr X as Customer
+  -name
+  -address
+  -phone no
+  -pan no
+  -adhar no
+  -email 
+  -type of account
+  -deposit amount
+etc...
+
+Abstraction collects data and organize under single unit called "class"
+..................................................................................
+			 Classes in kotlin
+..................................................................................
+
+How to declare class and properties(variables)
+
+class Customer {
+    //data and operations
+    var id:Int 
+}
+
+fun main() {
+
+}
+This code causes compile time error
+"Property must be initialized or be abstract"
+Note:
+ In java if any instance variables(property), not initalized,would be null by default
+You know very well, kotlin never allow null by default.
+
+What if i want null?
+class Customer {
+    //data and operations
+    //var id: Int = 0
+    //null if want
+    var id: Int? = null
+    var name:String? = null 
+    var city:String? = null
+}
+
+fun main() {
+
+}
+.........
+Memory Allocation:
+..................
+  In object orientation , memory allocation for a class called "Object creation/instance creation"
+
+var variable:Type = ConstructorCall()
+
+var customer:Customer = Customer()
+
+Note: in Java we use "new" keyword to allocate memory.
+ In Kotlin no new Keyword.
+
+class Customer {
+    //data and operations
+    //var id: Int = 0
+    //null if want
+    var id: Int? = null
+    var name: String? = null
+    var city: String? = null
+}
+
+fun main() {
+    //Expclit type
+    var customer: Customer = Customer()
+    //Type inference
+    var customerOne = Customer()
+
+    //How to access properties
+    println("id ${customer.name} Name ${customer.name} ${customer.city}")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

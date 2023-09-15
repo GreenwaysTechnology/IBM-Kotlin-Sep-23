@@ -22,7 +22,7 @@ fun main() {
     sayGreet(greet)
     //passing anonmous function as parameter directly
     sayGreet(fun() {
-        println("Greet anonymous")
+        println("test")
     })
 
 }
