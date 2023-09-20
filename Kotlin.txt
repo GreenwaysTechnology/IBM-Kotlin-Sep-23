@@ -2188,6 +2188,7 @@ if you want DSL coding, pass lambda always last parameter
 ...................................................................................
 
 Yes we can skip lambda args using "_" notation instead of name.
+
 fun doCompute(a: Int = 10, b: Int = 10, action: (Int, Int) -> Unit) {
     action(a, b)
 }
@@ -2352,21 +2353,762 @@ fun main() {
     //How to access properties
     println("id ${customer.name} Name ${customer.name} ${customer.city}")
 }
+.....................................................................................
+				variables declarations
+.....................................................................................
+
+1.using var keyword - can be reinitalized
+2.using val keyword - cant be reinitalized - Immutable variables
+   "The Original memory address can't be overriden.
+fun main() {
+    var a = 10
+    //reintialization of a
+    println(a)
+    a = 19
+    println(a)
+    val b =10
+    println(b)
+    //b=90
+}
+.....................................................................................
+			State(data properties) initalization
+.....................................................................................
+
+1.inside class
+2.Outside class after object creation via reference variable
+3.During Object creation - Constructors
+
+Inside class:
+class Employee {
+    //Property intialization inside class directly
+    val employeeId: Int? = 0
+}
+
+fun main() {
+    //var is keyword
+    //employee is variable
+    //Employee() is constructor call
+    var employee = Employee();
+}
+
+init block:
+ init is special block used to initalize the variables and any code.
+A Single class can have multiple init blocks but recommended having only one init block.
+init blocks are getting executed the order in which they are declared.
+
+class Employee {
+    //Property intialization inside class directly
+    //val employeeId: Int? = 0
+    var employeeId: Int?
+
+    //init block
+    init {
+        println("Block 1")
+        employeeId = 0
+    }
+
+    init {
+        println("Block 2")
+    }
+
+    init {
+        println("Block 3")
+    }
+}
+
+fun main() {
+    //var is keyword
+    //employee is variable
+    //Employee() is constructor call
+    var employee = Employee();
+    println("Id ${employee.employeeId}")
+}
+.....................................................................................
+Out side class:
+..............
+fun main() {
+    //var is keyword
+    //employee is variable
+    //Employee() is constructor call
+    var employee = Employee();
+    println("Id ${employee.employeeId}")
+
+    //outside class 
+    employee.employeeId = 10
+    println("Id ${employee.employeeId}")
+
+}
+
+In java , all instance variables either initalized via constructors or setters
+It is not recommended using reference variables directly.
+
+Setters :Mutators:
+.................
+1.It is special method, used to initalize the properties.
+2.It is part of java Bean specifications
+
+Kotlin and Setters:
+...................
+
+1.Kotlin does not recommend to have setters by default.
+2.Kotlin uses implicit setters by default.
+  employee.employeedId=10  ===> employee.setEmployeeId(10)
+
+
+Getters:Accessors:
+..................
+1.It is special method used to read the properties
+2.It is part of java bean specification.
+
+
+Kotlin and Getters:
+1.Kotlin does not recommend to have getters by default.
+2.Kotlin uses implicit getters by default.
+  println(employee.employeedId) ===> employee.getEmployeeId().
+
+Can we have explicit getters and setters?
+  
+Yes!
+
+Syntax:
+ var <PropertyName>:[PropertyType] =[Property_initalizer]
+ [getter]
+ [setter]
+
+What is use case of explicit setters and getters?
+   if you want to have some extra code or formating coding.
+class User {
+    var name: String? = null
+        //setter
+        set(value) {
+            //backing field
+            field = "Mr / Mrs $value"
+        }
+        //getter
+        get() {
+            return field?.uppercase()
+        }
+}
+
+
+fun main() {
+    var user = User();
+    user.name = "subramanian"
+    println(user.name)
+
+}
+...............................................................................
+
+Computed Properties:
+  Coimbing more variables and producing an expression.
+
+class GuestUser {
+    var firstName: String? = null
+    var lastName: String? = null
+    var fullName: String? = null
+        //computed property
+        get() {
+            return "${this.firstName} ${this.lastName}"
+        }
+}
+
+fun main() {
+    var user = GuestUser()
+    user.firstName = "Subramanian"
+    user.lastName = "Murugan"
+    println(user.fullName)
+}
+..................................................................................
+			Getters are Function Expression syntax
+..................................................................................
+class MyUser {
+    var name: String? = null
+        set(value) {
+            field = "Mr/Mrs $value"
+        }
+        //normal method syntax
+//       get() {
+//           return field?.uppercase();
+//       }
+        get() = field?.uppercase()
+}
+
+fun main() {
+    val user = MyUser()
+    user.name = "Subramanian"
+    println("Name ${user.name}")
+}
+.....................................................................................
+How to intialize the object properties during object creation?
+Constructors
+
+What is Constructors?
+
+ Constructors are special methods , are used to initalize the object properites during object creation.
+
+Properties Declarations:
+........................
+
+Properties are declared in Kotlin in two ways.
+
+1.Inside class
+class User { 
+  var id:Int?=null
+}
+2.As part of the Constructor
+
+Types of constructors:
+
+1.Primary Constructor
+2.Secondary Constructor
+
+Primary constructors are default Constructors...
+Secondary constructors are additional constructors for overloading.
+
+Primary Constructors:
+.....................
+ Primary Constructors are added as part of class header.
+
+syntax:
+
+class ClassName constructor(){}
+
+Note:
+ If the primary constructor does not have any annotations or visibility modifiers, the constructor keyword can be ommited
+
+class ClassName (){}
+
+class ClassName [private | @Something] (){}
+
+"Primary constructors does not contain any code, if want special initalization, should be given inside "init" block.
+
+
+Note:
+ In java you must give multiple constructors for each data pair initalization
+like
+default constructor and two arg, three arg,n-arg constructors.
+
+How many ways if you want to initalize the object, you have to have those many constructors, in kotlin you dont need those many constructors, because of default values , constructors are dynamically populated.
+
+class Person constructor(
+    var firstName: String? = "",
+    var lastName: String? = "",
+    var age: Int? = 1
+) {
+
+}
+
+fun main() {
+    //pass constructor parameters
+    //default constructor
+    var person = Person();
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //all arg constructor
+    person = Person(firstName = "Subramanian", lastName = "Murugan", age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //two arg
+    person = Person(firstName = "Subramanian", age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //single arg
+    person = Person(age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+}
+....................................................................................
+			  Without Constructor Keyword
+
+
+class Person(
+    var firstName: String? = "",
+    var lastName: String? = "",
+    var age: Int? = 1
+) {
+
+}
+
+fun main() {
+    //pass constructor parameters
+    //default constructor
+    var person = Person();
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //all arg constructor
+    person = Person(firstName = "Subramanian", lastName = "Murugan", age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //two arg
+    person = Person(firstName = "Subramanian", age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //single arg
+    person = Person(age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+}
+....................................................................................
+			Constructors and Init Block
+...................................................................................
+ //constructors with init block
+class Person(
+    var firstName: String? = "",
+    var lastName: String? = "",
+    var age: Int? =0
+) {
+    init {
+        age = 18
+    }
+}
+
+fun main() {
+    //pass constructor parameters
+    //default constructor
+    var person = Person();
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //all arg constructor
+    person = Person(firstName = "Subramanian", lastName = "Murugan", age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //two arg
+    person = Person(firstName = "Subramanian", age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+    //single arg
+    person = Person(age = 43)
+    println("firstName ${person.firstName} lastName ${person.lastName} ${person.age}")
+}
+
+Output:
+firstName  lastName  18
+firstName Subramanian lastName Murugan 18
+firstName Subramanian lastName  18
+firstName  lastName  18
+
+here 18 is final output, because init block is called after constructor call, what ever parameters if you are passing via constructors can be overriden by init block.
+
+Note: if you want new value/updated value, you have to initalize after object creation using "reference variable"
+ person.age = 43
+.....................................................................................
+			Secondary Constructors
+...................................................................................
+
+A class can have more constructors expliciltly apart from the primary constructors, Genarlly to mimic the overloading feature.
+
+A secondary constructors are introduced inside class using "Constructor keyword".
+
+
+class MyClass constructor(){
+    //Secondary constructors
+    constructor(a:String) {
+        println("Constructor with String arg ${a}")
+    }
+}
+
+
+fun main(){
+    
+}
+
+This code throws compile error "Primary constructor call expected".
+
+Note:
+  Each Secondary Constructor needs to delegate to the primary constructors either directly or indirectly through anthoer secondary constructors.
+Delegation to another constructor for same class is done using "this" keyword.
 
 
 
+class MyClass constructor() {
+    //Secondary constructors
+    constructor(a: String) : this() {
+        println("Constructor with String arg ${a}")
+    }
+
+    constructor(b: Int) : this() {
+        println("Constructor with Int arg ${b}")
+    }
+
+    constructor(c: Boolean) : this() {
+        println("Constructor with String arg ${c}")
+    }
+}
 
 
+fun main() {
+    var myclass = MyClass("subramanian")
+    myclass = MyClass(100)
+    myclass = MyClass(true)
+}
+
+output:
+Constructor with String arg subramanian
+Constructor with Int arg 100
+Constructor with Boolean arg true
 
 
+without constructor keyword
+class MyClass() {
+    //Secondary constructors
+    constructor(a: String) : this() {
+        println("Constructor with String arg ${a}")
+    }
+
+    constructor(b: Int) : this() {
+        println("Constructor with Int arg ${b}")
+    }
+
+    constructor(c: Boolean) : this() {
+        println("Constructor with Boolean arg ${c}")
+    }
+}
+......................
+Without Primary constructors and can we have only secondary constructors?
+
+Yes!.
+
+class MyClass {
+    //Secondary constructors
+    constructor(a: String) {
+        println("Constructor with String arg ${a}")
+    }
+
+    constructor(b: Int) {
+        println("Constructor with Int arg ${b}")
+    }
+
+    constructor(c: Boolean) {
+        println("Constructor with Boolean arg ${c}")
+    }
+}
+
+fun main() {
+    var myclass = MyClass("subramanian")
+    myclass = MyClass(100)
+    myclass = MyClass(true)
+}
+.....................................................................................	
+			  class Memembers
+.....................................................................................
+
+A class can have many things.
+
+1.constructors and initalizer blocks
+2.properties
+3.functions
+4.Nested and inner classes
+5.Object declarations
+
+Functions and class Declarations:
+.................................
+class CustomerService {
+
+    //functions / methods
+    fun findAll(): String {
+        return "findAll"
+    }
+
+    fun save(employee: String?): String? {
+        return "saved"
+    }
+
+    //single function expression
+    fun remove(id: Int?) = "$id Removed"
+}
+
+fun main() {
+    var customerService = CustomerService()
+    println(customerService.findAll())
+    println(customerService.save("employee"))
+    println(customerService.remove(1))
+}
+.....................................................................................
+			Classes - functions higher order, lambda
+.....................................................................................
+class Util {
+    //normal function
+    fun sayHai(): Unit {
+        println("Hai")
+    }
+
+    //literal declaration
+    var sayHello: () -> Unit = fun() {
+        println("Hello")
+    }
+
+    //lambda version
+    var add = { a: Int, b: Int ->
+        a + b
+    }
+
+    //higher order function
+    fun login(userName: String = "", password: String = "", resolve: (String) -> Unit, reject: (String) -> Unit) {
+        if (userName == "admin" && password == "admin") {
+            resolve("login success")
+        } else {
+            reject("login failed")
+        }
+    }
+
+    //higher order lambda
+    fun delay(action: () -> Unit) {
+        action()
+    }
+
+    var async = { action: (String) -> Unit ->
+        action("async function")
+    }
+}
 
 
+fun main() {
+    var util = Util()
+    util.sayHello()
+    util.sayHai()
+    println(util.add(10, 10))
+    util.login(userName = "admin",
+        password = "admin",
+        fun(status) {
+            println(status)
+        },
+        fun(err) {
+            println(err)
+        }
+    )
+    util.delay { println("delay") }
+    util.async { println(it) }
+}
+.....................................................................................
+			Nested and inner classes
+.....................................................................................
+Classes can have other classes called "Nested Class or Inner class".
+
+Inner and outer class declartions
+//class outer 
+class Outer {
+    constructor() {
+        println("Outter class constructor")
+    }
+
+    class Inner {
+        constructor() {
+            println("Inner class constructor")
+        }
+    }
+}
 
 
+fun main() {
+
+}
+.....
+
+How to create instance/object for inner classes?
+
+There are are many ways
+
+1.Using outer class function
+//class outer
+class Outer {
+    constructor() {
+        println("Outter class constructor")
+    }
+
+    class Inner {
+        constructor() {
+            println("Inner class constructor")
+        }
+    }
+
+    fun createInner() {
+        var inner = Inner()
+    }
+}
 
 
- 
+fun main() {
+    var outter = Outer()
+    outter.createInner()
+}
 
+After creating object? How to access inner class properties and methods?
+
+//class outer
+class Outer {
+    constructor() {
+        println("Outter class constructor")
+    }
+
+    class Inner {
+        constructor() {
+            println("Inner class constructor")
+        }
+        fun doStuff(){
+            println("Inner doStuff")
+        }
+    }
+
+    fun createInner() {
+        var inner = Inner()
+        inner.doStuff()
+    }
+}
+
+
+fun main() {
+    var outter = Outer()
+    outter.createInner()
+}
+
+
+2.Using outer class directly.
+//class outer
+class Outer {
+    constructor() {
+        println("Outter class constructor")
+    }
+
+    class Inner {
+        constructor() {
+            println("Inner class constructor")
+        }
+
+        fun doStuff() {
+            println("Inner doStuff")
+        }
+    }
+
+    fun createInner() {
+        var inner = Inner()
+        inner.doStuff()
+    }
+}
+
+
+fun main() {
+    var outter = Outer()
+    outter.createInner()
+
+    //access inner classes via outter class
+    var outertwo = Outer.Inner()
+    outertwo.doStuff()
+
+    //calling methods directly using outer and inner instance
+    Outer.Inner().doStuff()
+}
+.....................................................................................
+
+Can Inner class access outter class members?
+
+class OutterFoo {
+    var myvar: Int? = 10
+
+    class Bar {
+        fun bar() = myvar
+    }
+}
+You will get compile time error "Unresolved reference: myvar"
+
+in order to access outter class variables , nested classes must be marked with keyword called "inner" infront of class 
+
+class OutterFoo {
+    var myvar: Int? = 10
+
+    inner class Bar {
+        fun bar() = myvar
+    }
+}
+
+fun main() {
+    print(OutterFoo().Bar().bar())
+}
+.....................................................................................
+Anonymous Inner classes: to be discussed later
+
+.....................................................................................
+			   Dynamic Programming
+.....................................................................................
+In java , if you declare methods inside class, only those methods only can be used after instance creation.
+
+Util.java
+
+public class Util {
+   public void add(){}
+}
+Util util=new Util()
+util.add()
+
+Here apart from add method we cant use other methods meaning that you cant insert methods dynamically after object creation.
+
+Some languages(js,groovy,scala) offers  a feature to add/insert methods dynamically/during runtime without explcitily declaring inside class - "Dynamic programming"
+
+Kotlin provides the ability to extend(adding) a class or interface with new functionality with out having to inherit or use any design patterns like "Decorator"
+
+This is done via special declartions called "extensions"
+
+Where this feature is usefull?
+
+For eg, you can write new functions for a class or an interface from a third party lib that you cant modify.
+
+Added functions to the lib, can be called in the usual way , as if they were methods of original class. This mechanism is called an "extension function".
+
+Even you can also add new properties which is called "extension properties"
+
+
+Extension function:
+..................
+
+In order to declare extension function, the prefix its name with a "Receiver Type".
+
+Receiver Type:
+ Which Referes to the type being extended.
+
+
+fun ReciverType.method(args):Unit{
+
+}
+
+
+class Utility {
+    //member function
+    fun sayHello(): String {
+        return "MemberFunction"
+    }
+}
+
+//Extensions
+fun Utility.sayHai(): String {
+    return "Extension Function"
+}
+
+
+fun main() {
+    var utility = Utility()
+    println(utility.sayHello())
+    println(utility.sayHai())
+
+}
+....................................................................................
+			Can we extend any built in classes?
+
+Yes, if you look at java, String final class, meaning that you cant extend(inherit) the class, so you cant have any your own string apis.
+
+But in Kotlin you can, thats where Extension functions comes into Picture
+class Utility {
+    //member function
+    fun sayHello(): String {
+        return "MemberFunction"
+    }
+}
+
+//Extensions
+fun Utility.sayHai(): String {
+    return "Extension Function"
+}
+
+//Extensions with String object
+fun String.concat(): String {
+    return "concat";
+}
+
+
+fun main() {
+    var utility = Utility()
+    println(utility.sayHello())
+    println(utility.sayHai())
+    var message: String = "hello"
+    println(message.concat())
+}
 
 
 
