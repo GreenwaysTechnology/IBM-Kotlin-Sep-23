@@ -3109,6 +3109,707 @@ fun main() {
     var message: String = "hello"
     println(message.concat())
 }
+.....................................................................................
+			 Receiver Type -Advanced
+.....................................................................................
+
+// ReceiverType.function; String
+fun String.concat(s1: String): String {
+    //How to refer receiver Type(Object) and its properties?
+    //there is keyword called this keyword - this keyword is used to refer "Receiver" Object
+    return "$s1 $this"
+}
+
+fun main() {
+    var str1 = "Hello"
+    var str2 = "Subramanian";
+    println(str2.concat(str1)) //Hello Subramaian
+}
+.....................................................................................
+Buitlin Extensions lot of functions are available in the core language
+
+Int -  plus,div,minus etc..
+
+Even we can write own functions
+
+fun Int.add(another: Int): Int {
+    return this.plus(another)
+}
+
+fun Int.multiply(another: Int): Int {
+    return this * another
+}
+
+fun main() {
+    var one = 10
+    var two = 2
+    var res = one.plus(two)
+    println(res)
+    println(one.add(two))
+    println(one.multiply(two))
+
+}
+.....................................................................................
+			   Extension Properties
+.....................................................................................
+class MyUtil {
+
+}
+
+//Extension Properties
+val MyUtil.greetings: String
+    get() = "Hello"
+
+val String.hello: String
+    get() = "Hello"
+
+fun main() {
+    var myUtil = MyUtil()
+    println(myUtil.greetings)
+    var str:String = ""
+    println(str.hello)
+}
+....................................................................................
+				Infix function
+.....................................................................................
+What is infix function?
+
+Functions are marked with "infix" keyword are called infix functions.
+infix functions are used to create DSL based code, we can omit the parentheses.
+
+class A {
+  infix fun doStuff(x:Type){}
+}
+var a = A()
+a.doStuff(value)
+a.doStuff 10
+a doStuff 10
+
+"hello" indexof 1 == > "hello".indexof(1)
+
+Rules:
+1.It must be class member functions or it can be extension function
+2.They must have single parameter
+3.The arg must not accept variable number of args(var args) and must have no default value.
+
+class MyInfix {
+    infix fun sayHello(name: String): Unit {
+        println(name.uppercase())
+    }
+}
+
+//extension function
+infix fun MyInfix.sayHai(name: String) {
+    println(name.uppercase())
+}
+
+infix fun Int.myAdd(another: Int) {
+    println(this.add(another))
+}
+
+fun main() {
+    var myInfix = MyInfix()
+    //regular call
+    myInfix.sayHello("Hello")
+    //infix syntax
+    myInfix sayHello "Hello"
+    myInfix sayHai "subramanian"
+    10 myAdd 100
+}
+.....................................................................................
+			 inline functions
+.....................................................................................
+
+What is inline functions?
+
+
+Generally functions are called from another functions, which creates separate stack framework.
+some times it is more expensive cpu and memory
+fun a(){
+  b()
+}
+fun b() {
+  //body 
+}
+
+We can use line functions not to create new stack framework, this feature is available in many languages like c,c++
+
+inline:
+  "By inserting the function code at the address of each function call , there by saving the overhead of a function call"
+
+		"copy and paste function code of callee into calling place"
+
+//caller
+fun a(){
+ //calling place
+  b()
+}
+//callee
+fun b() {
+  //body 
+}
+
+Inlinining basically requesting the compiler to copy the (inlined) code at the calling place.
+
+Why?
+ Avoviding un neccessary stack framework creations, so that you can avoid tracking return address,args,values.
+
+Kotlin and Inline Functions:
+...........................	
+
+In Kotlin, the higher order functions and lambdas are represented as "Object" behind the scene.
+
+Since it is object takes some memory and increate the memory overhead if function gets called more no of times.
+
+The use case might be the function does a very basic functionality that passing the control is not even worth as it is being used in multiple place, we need to create a separate function.
+
+in order to reduce memory overhead of such functions we can use the "inline" keyword.
+
+"inline" requests the CPU to not to allocate any memory for the functions and simply the copy body that function at the calling place.
+
+fun sayGreet() {
+    var counter = 1..100
+    for (count in counter) {
+        //sayHello(count)
+        println(isEven(count))
+    }
+}
+
+inline fun isEven(no: Int): Boolean {
+    return no % 2 == 0
+}
+
+inline fun sayHello(count: Int) {
+    println("Hello $count")
+}
+
+
+fun main() {
+    sayGreet()
+}
+.....................................................................................
+			Hierachy- Object relationship
+.....................................................................................
+
+There are two types hierachies:
+1.HAS-A - composition
+2.IS-A - Inheriance
+
+Code Reuse Patterns:
+1.Inheritance
+2.Composition
+
+IS-A: Inheritance:
+.................
+
+What is inheritance? Why inheritance?
+
+Code Reuse, To avoid code duplication across the application, having common code that can be shared.
+
+
+Inheritance Code Reuse Implmentations:
+....................................
+1.class-concrete class
+2.interfaces
+3.Abstract classes
+
+Kotlin and inheritance:
+......................
+1.In kotlin all classes are freezed by default for extensions(inheritance)
+   "Inheritance is disabled by default"
+2.In Kotlin all classeses are "final classes" by default
+
+
+
+class Base {
+    
+}
+class Child: Base() {
+    
+}
+Compile time Error: 
+This type is final, so it cannot be inherited from
+
+
+in order to allow any class to be inherited  it has to be marked as "open" keyword
+
+
+open  class Base {
+
+}
+class Child: Base() {
+
+}
+
+
+fun main(){
+
+}
+
+...
+
+Simple example:
+open class Base {
+    init {
+        println("Base init is called")
+    }
+}
+
+class Child : Base() {
+    init {
+        println("Child init is called")
+    }
+}
+
+
+fun main() {
+    var child = Child()
+}
+....................................................................................
+			    Typing
+.....................................................................................
+
+How the reference variables are going to bind the expressions during compile time and runtime ?
+
+var myref = Child()
+
+Child myref =Child()
+
+Polymorphsim:
+..............
+There are two types of polymorphism.
+1.compile time
+2.runtime 
+
+Compile Time:
+    The reference variable binds the properties and methods during compile time.
+ This means the reference variables knows that in advance what are the methods are going to invoked.
+
+var myref =Dog()
+myref.bark() // binding
+
+Run Time:
+   The runtime calls the implementation code, the object 
+ The Program to super type.
+
+    "The reference variable type can be same type or its Parent type"
+
+
+open class Animal {
+    fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+
+}
+
+fun main() {
+    //Program to Concretype
+    var dog: Dog = Dog()
+    println(dog.eat())
+}
+
+Output:
+Animal eats
+
+Here you can note down, there is no method implementation inside dog class but how we are getting output?
+
+
+Source code:
+open class Animal {
+    fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+
+}
+
+After compilation: .class file
+
+public class Animal {
+    public String eat() {
+        return "Animal eats"
+    }
+}
+
+public class Dog extends Animal {
+//it is copied by compiler
+   public String eat() {
+        return super.eat()
+    }
+
+}
+Dog dog = new Dog()
+dog.eat()
+........................
+
+How to reimplement eat method in the Dog class?
+
+This is called as Overriding
+
+In Kotlin all methods are by default "final" - cant be overriden
+
+if you want to override the method, you have to open it.
+
+In the dervied class, we need to use key word "override" 
+
+
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    override fun eat(): String {
+        return "Dog eats"
+    }
+}
+
+fun main() {
+    //Program to Concretype
+    var dog: Dog = Dog()
+    println(dog.eat())
+}
+.....................................................................................
+			 Program To Super type
+....................................................................................
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    override fun eat(): String {
+        return "Dog eats"
+    }
+}
+
+fun main() {
+    //Program to Super type
+    var dog1: Animal = Dog()
+    println(dog1.eat())
+
+}
+.....................................................................................
+			Super Type and SubType
+.....................................................................................open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    override fun eat(): String {
+        return "Dog eats"
+    }
+
+    fun bark(): String {
+        return "Dog barks"
+    }
+}
+
+fun main() {
+    //Program to Concretype
+    var dog: Dog = Dog()
+    println(dog.eat())
+
+    //Program to Super type
+    var dog1: Animal = Dog()
+    println(dog1.eat())
+    dog1.bark()
+
+}
+Compile time error for dog1.bark:
+
+Why this error?
+
+Rules:
+
+1.During compile time the compiler always looks left side(Type) for method expression binding
+ var dog1: Animal = Dog()
+ dog1.bark()
+Here type is Animal, now you can look at the compiler cant find "bark" method in the type called "Animal" so that compiler will give error.
+
+2.During runtime the , The runtime looks always right Side(Instance) for method invocation(dynamic method dispatch /dynamic method invocation): Runtime polymorphism.
+ 
+How to solve the compile time errors?
+ How to invoke sub class(Dog) methods using Parent Type(animal)?
+
+Solution is "Type Casting"
+  We need to convert Animal type to Dog Type : Down casting (Super type down to Sub Type)
+
+open class Animal {
+    open fun eat(): String {
+        return "Animal eats"
+    }
+}
+
+class Dog : Animal() {
+    override fun eat(): String {
+        return "Dog eats"
+    }
+
+    fun bark(): String {
+        return "Dog barks"
+    }
+}
+
+fun main() {
+    //Program to Concretype
+    var dog: Dog = Dog()
+    println(dog.eat())
+
+    //Program to Super type
+    var dog1: Animal = Dog()
+    println(dog1.eat())
+    //dog1.bark()
+    //here we convert dog1 type(Animal) to Dog type
+    var dog2: Dog = dog1 as Dog
+    println(dog2.bark())
+
+}
+
+here "as" is type casting operator....
+....................................................................................
+			 How to over ride properties?
+....................................................................................
+open class Animal {
+    open var category: String? = "Animal"
+  
+}
+
+class Dog : Animal() {
+    override var category: String? = "Dog"
+  
+}
+
+fun main() {
+
+    var dog1: Animal = Dog()
+
+    println(dog1.category)
+}
+.....................................................................................
+  	  How to call Super class Properties and methods
+.....................................................................................
+open class Account {
+    open fun deposit(): Int {
+        return 100
+    }
+
+    val accountType: String get() = "Account Type"
+}
+
+class SavingsAccount : Account() {
+    override fun deposit(): Int {
+        return super.deposit().plus(1000)
+    }
+
+    val accType: String get() = "${super.accountType} is Savings Account"
+
+}
+
+fun main() {
+    var sb: Account = SavingsAccount()
+    var sb1 = sb as SavingsAccount
+    println("${sb.deposit()} ${sb1.accType}")
+}
+.....................................................................................
+			Interfaces
+....................................................................................
+
+Interfaces are used to share code "Across the mutliple Hierachies" Where as the classes are used to share code only particular family type.
+
+Class Based Hiearchy(Inheritance):
+.................................
+Single family
+
+eg:
+    Animal
+     |
+    eat
+Dog
+Cat
+Tiger
+
+Interface based Inheritance:
+............................
+Multiple family of classes
+
+      Eatable
+ 	|
+       eat
+------------------------------
+|       |     |     |     |
+Animal Birds Humans Worms insects .....
+
+interface Eatable {
+    fun eat(): String
+}
+
+class Cat : Eatable {
+    override fun eat(): String {
+        return "Cat eats"
+    }
+
+    fun hunt() = "Hunt"
+}
+
+class Duck : Eatable {
+    override fun eat(): String {
+        return "Duck Eats"
+    }
+
+    fun swim() = "Swim"
+}
+
+fun main() {
+    var myvar: Eatable? = null
+    myvar = Cat()
+    println(myvar.eat())
+    //smart casting happens
+    println(myvar.hunt())
+    myvar = Duck()
+    println(myvar.eat())
+//    var myvar2 = myvar as Duck
+//    println(myvar2.swim())
+
+    //smart casting happens
+    println(myvar.swim())
+
+}
+
+Notee:
+ In the above code we have not done explicit casting in order to call implementation instance like swim and hunt methods
+
+"Kotlin will take care of casting automatically which is called "Smart casting"
+
+This is applicable only to interfaces
+....................................................................................  
+		 Multiple interfaces and inheritance
+....................................................................................
+interface Eat {
+    fun eat(): String
+}
+
+interface Walk {
+    fun walk(): String
+}
+
+interface Hunt {
+    fun hunt(): String
+}
+
+class Tiger : Eat, Walk, Hunt {
+    override fun eat(): String {
+        return "eat"
+    }
+
+    override fun hunt(): String {
+        return "hunt"
+
+    }
+
+    override fun walk(): String {
+        return "walk"
+
+    }
+}
+
+fun main() {
+    var tiger = Tiger()
+    println(tiger.eat())
+    println(tiger.walk())
+    println(tiger.hunt())
+
+}
+....................................................................................
+		 Mutliple Interfaces and method Conflicts , How to solve them
+....................................................................................
+
+
+interface  Interface1 {
+    fun doStuff():String
+}
+
+interface  Interface2 {
+    fun doStuff():String
+}
+class Implementor: Interface1,Interface2 {
+    override fun doStuff(): String {
+        return  "DoStuff"
+    }
+}
+fun main() {
+    var implementor = Implementor()
+    println(implementor.doStuff())
+}
+With respect to abstract methods, methods which has no implementation, we dont need to worry the which is over riden
+
+....................................................................................
+			 interfaces and implementations
+.....................................................................................
+Interfaces can have mulitple implementations too , what if method duplications?
+
+"The Implementator class must provide default implementation and inisde that implementation we need to call method "super<interface1>.foo()"
+
+interface Interface1 {
+    fun doStuff(): String
+
+    //implementation methods
+    fun foo() {
+        println("interface 1")
+    }
+}
+
+interface Interface2 {
+    fun doStuff(): String
+
+    //implementation methods
+    fun foo() {
+        println("interface 2")
+    }
+}
+
+class Implementor : Interface1, Interface2 {
+    override fun doStuff(): String {
+        return "DoStuff"
+    }
+
+    override fun foo() {
+        super<Interface2>.foo()
+    }
+}
+
+fun main() {
+    var implementor = Implementor()
+    println(implementor.doStuff())
+    implementor.foo()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
