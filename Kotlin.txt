@@ -3792,6 +3792,634 @@ fun main() {
     println(implementor.doStuff())
     implementor.foo()
 }
+.....................................................................................
+			Functional Interfaces - SAM (Single abstract method)
+.......................................................................................
+
+There are two implementations of SAM
+
+1.java style
+  -Using anonmous innter class pattern
+2.Kotlin style
+  - we have to declare with "fun" keyword
+
+Inside interface if you declare methods, those methods are called as "abstract methods"
+
+interface MyInterface { 
+    fun myapi():String
+}
+
+Abstract methods are methods without implementations.
+
+if an interface having single abstract method,that interface is called "SAM" - single abstract method.
+
+
+The below interface cant be called as "Functional /SAM" interface
+
+interface MyInterface { 
+    fun myapi():String
+    fun sayHello():String
+}
+
+SAM interfaces are used inside lambda expressions.
+
+if you want to implement interface , you need class, using functional interfaces you dont need to provide a separate class rather we use "object" anonmous inner class.
+
+Kotlin style :
+interfaces must be marked with keyword called "fun"
+if no fun keyword, it looks like java style.
+
+//this interface having only one abstract methods
+fun interface Greeter {
+    //abstract fun greet(): Unit
+    //by default all methods within interface is abstract, no need of using abstract keyword.
+    fun greet(): Unit
+}
+//this interface having only one abstract methods
+fun interface Greeter {
+    //abstract fun greet(): Unit
+    //by default all methods within interface is abstract, no need of using abstract keyword.
+    fun greet(): Unit
+}
+
+fun interface Hello {
+    fun sayHello(): Unit
+}
+
+//how to implement interface
+//way 1 : using class implementation
+class GreeterImpl : Greeter {
+    override fun greet() {
+        println("Greet")
+    }
+}
+
+
+fun main() {
+    var greeter = GreeterImpl()
+    greeter.greet()
+    //way 2 : anonymous inner class syntax: without class implementation .
+    var mygreet = object : Greeter {
+        override fun greet() {
+            println("Anonymous Inner class")
+        }
+    }
+    mygreet.greet()
+    var mygreet1 = Greeter {
+        println("Anonymous Inner class")
+    }
+    mygreet1.greet()
+    //Refactored Code Lambda Expression syntax: but the interface must be marked with fun keyword
+    var hello = Hello {
+        println("Hello Lambda version")
+    }
+    hello.sayHello()
+    //short cut 
+    Hello {
+        println("Hello simplified lambda")
+    }.sayHello()
+
+}
+....................................................................................
+		   Abstract classes = interface + concrete class 
+....................................................................................
+
+Abstract class and Non Abstract methods and abstract properties.
+
+import kotlin.math.cbrt
+
+abstract class Bird {
+    //abstract method
+    abstract fun fly(): Unit
+
+    //non abstract method
+    fun saveBirds() {
+        println("Save Birds from hunters and Global warming")
+    }
+}
+
+//
+class Sparrow : Bird() {
+    override fun fly() {
+        println("Sparrow flys")
+    }
+}
+
+class Eagle : Bird() {
+    override fun fly() {
+        println("Eagle flys at high")
+    }
+}
+
+
+fun main() {
+    var bird: Bird = Sparrow()
+    bird.fly()
+    bird.saveBirds()
+    bird = Eagle()
+    bird.fly()
+    bird.saveBirds()
+}
+....................................................................................
+				Has-a :Composition
+....................................................................................
+Composition:
+ Object Linking
+
+
+class Address(var street: String = "street", var city: String = "City") {}
+
+//Here client has a Address
+class Client(var id: Int = 0, var name: String = "Name", var address: Address = Address()) {}
+
+fun main() {
+    var client = Client(
+        id = 1,
+        name = "Subramanian",
+        address = Address(
+            street = "10th Street",
+            city = "Coimbatore"
+        )
+    )
+    println("${client.id} ${client.name} ${client.address.city} ${client.address.street} ")
+}
+.....................................................................................
+			 Encaspulation
+.....................................................................................
+
+How to share and how to restric code from one class and one package to class and another package.
+
+Visibility Modifiers:
+ are used to restrict code sharing...
+
+What can be code?
+  code can be "class objects,interfaces,constructors,functions,properties and its setters and getters"
+
+Keywords
+1.private
+2.protected
+3.internal
+4.public 
+
+The default is public.
+
+Scope:
+1.file scope
+  any thing you declare part file is called file scope
+eg:
+ Hello.kt
+
+2.class scope
+ any thing you declare with in class
+eg:
+ class Myclass{
+
+ }
+3.module scope
+ any thing you declare with in the module(package)
+ package com.ibm.myapp
+
+
+1.file scope:
+  you can declare variables,functions,classes,interfaces etc....
+
+variables and functions can be marked private,public,internal
+
+"private" means which is not available outside "file"
+
+"public" means which is allowed outside "file" and across applications.
+
+"internal" means which is allowed outside "file" but it should be part of "that module/package
+
+eg:
+private var foo: Int = 10
+
+//public var bar: String = "20"
+//public by default
+var bar: String = "20"
+internal var b: String = "223"
+
+
+//functions with access modifer
+//fun myFun() {
+//    println("public fun")
+//}
+//Global Functions
+public fun myFun() {
+    println("public fun")
+}
+
+private fun getPassword() {
+    println("Password ")
+}
+
+//Specific to Module
+internal fun myInternal() {
+    println("Global function")
+}
+
+//classes
+//public class MyDemoClass {
+//
+//}
+
+//Global Class
+class MyDemoClass {
+
+}
+
+//private class is allowed, it is part of another internal kotlin class: so it is considered as
+//inner class
+private class MyDemoClassOne {
+
+}
+
+//Specific to module
+internal class MyInternalClass {
+
+}
+
+//Modifier 'protected' is not applicable to 'top level property without backing field or delegate'
+//protected var a:Int =10
+fun main() {
+    println(foo)
+    println(bar)
+    println(b)
+    myFun()
+    getPassword()
+    myInternal()
+    MyDemoClassOne()
+}
+.....................................................................................
+			 Modularity - Packages
+.....................................................................................
+
+How to organize the code?
+
+In java echo system code is organized into folders and files at low level and into packages and subpackages at logical level.
+
+When we organize the code, we have to define rules for how to share and how to restrict - Encapuslation.
+
+Modularity :
+
+package statement
+class 
+fun
+variables
+interfaces
+
+What is naming standard for packages?
+
+com.companyName.moduleName.subModule
+
+org.organization.module.submodule
+
+DNS naming standards.
+
+eg:
+ package com.google.android
+ package android.core.lib;
+
+
+Types of packages:
+1.custom package
+2.built in packages
+3.third party package.
+
+Built in packages for kotlin.
+
+package kotlin
+  This is core package which is qu in java , java.lang.
+
+package kotlin.collections
+   which offers data structures used by languge
+
+package kotlin.concurrent
+  Basic threading functionlity
+
+package kotlin.coroutines
+ Async Programming features
+
+package kotlin.io
+  io apis for reading,writing data from and to files and streams.
+.....................................................................................
+			core package kotlin features
+
+
+Any:
+  It is root of every Kotlin class.
+  In Java the root class is "Java.lang.Object"
+
+
+class Money{
+    
+}
+What is super class of this Kotlin class "Any"
+
+open class Any { 
+
+}
+
+class Money:Any{
+    
+}
+This class offers lot of methods which will be availble to all subclasses
+
+This class offers:
+1.equals
+2.hashcode
+3.toString
+
+toString
+  Returns the String Representation of object. By defualt "Any" class has logic like below.
+class Money {
+
+}
+
+fun main() {
+    var money = Money()
+    println(money.toString())
+}
+
+Money@6d311334
+
+Hascode representation of toString.
+
+Overriding toString method:
+..........................
+class Money {
+    var curreny: String? = "INR"
+
+    override fun toString(): String {
+        return "Currency [$curreny]"
+    }
+}
+
+fun main() {
+    var money = Money()
+    println(money.toString())
+}
+............
+equals Method:
+..............
+Comparing two objects says that whether objects are equal or not.
+
+
+
+
+class Square(val side: Int) {
+
+}
+
+fun main() {
+    var square1 = Square(10)
+    var square2 = Square(10)
+    var isEqual = square1.equals(square2)
+    println(isEqual)
+}
+Output:
+false
+
+How equals methods returns false?
+ "Any" class has method which always returns false
+
+in order to compare objects, we need to override equals method.
+
+Object equality is done via "Comparing Object properties only"
+for eg:
+ In Employee, each Employee is indefined by EmployeeId
+
+if two objects employeeId is same, Objects are same or Objects different
+
+
+In order to equalize kotlin offers three patterns
+
+1.using equals method
+2.using == operator
+  =>compares based on properties
+3.using === operator  
+  =>compares based on memory address
+
+
+
+class Square(val side: Int) {
+
+    override fun equals(other: Any?): Boolean {
+        //Test whether other variables is same as Square type: in java we use "instanceOf"
+        //operator : in Kotlin we use "is" operator
+        if (other is Square) {
+            return other.side == side
+        }
+        return false
+    }
+}
+
+fun main() {
+    var square1 = Square(10)
+    var square2 = Square(10)
+    var square3 = square2 // square3 and square2 points the same object
+
+    //using equals method
+    var isEqual = square1.equals(square2)
+    var res = if (isEqual) "Two Squares are equal" else "two squares are not equal"
+    println(res)
+    //using equals operator :Compares based on property
+    isEqual = square1 == square2
+    res = if (isEqual) "Two Squares are equal" else "two squares are not equal"
+    println(res)
+
+    //using triple equals operator compares based on memory location
+    isEqual = square3 === square2
+    res = if (isEqual) "Two Squares are equal" else "two squares are not equal"
+    println(res)
+}
+
+== "Structural Equality" -Object property verification
+=== "Referential Equality" - Object Memory location verification.
+.....................................................................................
+
+hashcode:
+ It is unquie no generated by JVM and attached to every instance , which we create, in order to identify the objects.
+
+class Square(val side: Int) {
+
+    override fun hashCode(): Int {
+        return 23232323
+    }
+}
+
+fun main() {
+    var square1 = Square(10)
+
+    println(square1.hashCode())
+}
+.....................................................................................
+		What if i want all methods of "Any" class override in sub class"
+			
+
+What if i want 
+
+->hascode
+->toString
+->equals 
+method in a class
+
+"Data Class":
+..............
+=>It is sole purpose is as name indicates which holds data.
+=>Data classes can hold standard functionality and some utiltiy functions such as "tostring hashcode,equals,clone apis"
+
+
+//data class Product(val id: Int, val name: String, val price: Double){}
+data class Product(val id: Int, val name: String, val price: Double)
+
+fun main() {
+    var product1 = Product(1, "IPHONE 15", 135000.00)
+    var product2 = Product(2, "IPHONE 15", 135000.00)
+    println(product1.toString())
+    println(product1.hashCode())
+    println(product1 == product2)
+    var product3 = product2.copy(id = 3, name = "IPHONE I5 Pro")
+    println(product3.toString())
+
+}
+.................................................................................
+			Custom Packages
+.................................................................................
+
+creating our own packages
+
+package com.ibm.kotlin.oo
+
+data class User(val id: Int, val name: String)
+
+val message: String = "USER APP"
+fun save() {
+    println("Save")
+}
+
+
+
+package com.ibm.kotlin.oo.main
+
+import com.ibm.kotlin.oo.User
+import com.ibm.kotlin.oo.message
+import com.ibm.kotlin.oo.save
+
+fun main() {
+    val user = User(id = 1, name = "Subrmanian")
+    println(user.toString())
+    save()
+    println(message)
+}
+
+=> to declare package we use package statement
+=> to link classes from different packages we use import 
+.....................................................................................
+		 DeStructuring Object Properties
+.....................................................................................
+
+package com.ibm.kotlin.oo.destructruing
+
+data class User(val id: Int, var name: String, var city: String)
+
+
+package com.ibm.kotlin.oo.destructruing
+
+fun main() {
+    var user = User(id = 1, name = "Subramanian", city = "Coimbatore")
+    //property access without Destructuring
+    println("${user.id} ${user.name} ${user.city}")
+    //With DeStructuring
+    var (id, name, city) = User(id = 1, name = "Subramanian", city = "Coimbatore")
+    println("$id $name $city")
+
+}
+.....................................................................................
+			Sealed Classes
+.....................................................................................
+
+Sealed classes and interfaces represented "restricted" class hiearchy that provide more control over inheritance.
+
+All Direct subclasses of a sealed class are known at compile time.
+
+No other subclasses may appear outside a module within which the sealed classes is defined.
+
+Sealed classes are abstract by default, so cant be instantiated.
+
+package com.ibm.kotlin.oo.sealedclasses
+
+sealed class MyResult {
+    //INNER Classes
+    data class Success(val resolve: String) : MyResult()
+    data class Failure(val reject: String) : MyResult()
+    data class Loader(val loading: String) : MyResult()
+}
+
+fun getSuccess(): MyResult {
+    return MyResult.Success("Success")
+
+}
+
+fun getFailure(): MyResult {
+    return MyResult.Failure("Failed")
+}
+
+fun getResponse(status: Int = 200): MyResult {
+    if (status == 200) return MyResult.Success("Response found")
+    return MyResult.Failure("Response Not found")
+}
+
+fun main() {
+    var status = getSuccess()
+    when (status) {
+        is MyResult.Success -> {
+            println(status.resolve)
+        }
+        is MyResult.Failure -> {
+            println(status.reject)
+        }
+        else -> {
+            println("Loading...")
+        }
+    }
+    status = getFailure()
+    when (status) {
+        is MyResult.Success -> {
+            println(status.resolve)
+        }
+        is MyResult.Failure -> {
+            println(status.reject)
+        }
+        else -> {
+            println("Loading...")
+        }
+
+    }
+    status = getResponse(500)
+    when (status) {
+        is MyResult.Success -> {
+            println(status.resolve)
+        }
+        is MyResult.Failure -> {
+            println(status.reject)
+        }
+        else -> {
+            println("Loading...")
+        }
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
