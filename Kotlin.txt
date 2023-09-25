@@ -4259,7 +4259,7 @@ fun main() {
 
 What if i want 
 
-->hascode
+->hashcode
 ->toString
 ->equals 
 method in a class
@@ -4410,6 +4410,698 @@ fun main() {
 
     }
 }
+...................................................................................
+				Enum -  class
+..................................................................................
+
+In order to represent "Named Constants" enums are used.
+package com.ibm.kotlin.oo.enums
+
+//Enum declartions
+enum class Color {
+    //RED=0,BLUE=1,GREEN=2
+    RED, BLUE, GREEN
+}
+enum class Positions {
+    NORTH,EAST,WEST,SOUTH
+}
+
+fun main() {
+  println("Value ${Color.RED.ordinal} Name ${Color.RED.name}")
+
+}
+..................................................................................
+			 Enum Initalizers
+.................................................................................
+
+package com.ibm.kotlin.oo.enums
+
+enum class Day(val day: Int) {
+    MONDAY(1),
+    TUESDAY(2),
+    WEDNESDAY(3),
+    THURSDAY(4),
+    FRIDAY(5),
+    SATURDAY(6),
+    SUNDAY(7)
+}
+
+
+fun main(){
+    println("Value ${Day.MONDAY.day} ${Day.MONDAY.name}")
+}
+.....................................................................................
+			 Methods inside Enum
+....................................................................................
+package com.ibm.kotlin.oo.enums
+
+enum class Day(val day: Int) {
+    MONDAY(1),
+    TUESDAY(2),
+    WEDNESDAY(3),
+    THURSDAY(4),
+    FRIDAY(5),
+    SATURDAY(6),
+    SUNDAY(7);
+
+    //methods
+    fun getDayOfWeek(): String {
+        return "[${SUNDAY}] IS Holiday"
+    }
+}
+
+
+fun main() {
+    println("Value ${Day.MONDAY.day} ${Day.MONDAY.name}")
+    println("${Day.SUNDAY.getDayOfWeek()}")
+}
+.....................................................................................
+			Companion Objects
+....................................................................................
+
+1.If you want to create Single ton,In java you have to write logic your self.
+2.Companion objects are used to create instance of class using factory methods.
+3.Companions are used to delclare static members in kotlin because kotlin does not support "static keyword"
+
+Properties of the "Object class" if you want to access, you have to use Notations like like.
+
+The below code is not singleton
+
+package com.ibm.kotlin.oo.companions
+
+class Greetings {
+    object Factory {
+        fun createInstance(): Greetings = Greetings()
+    }
+}
+
+fun main() {
+    println(Greetings.Factory.createInstance().hashCode())
+    println(Greetings.Factory.createInstance().hashCode())
+
+}
+
+Static Version
+package com.ibm.kotlin.oo.companions
+
+class Welcome {
+
+    //companion is used to declare static memebers
+    companion object {
+        //act as static methods, in Kotlin there is no static keyword
+        fun createInstance(): Welcome = Welcome()
+        var MESSAGE = "HELLO"
+        var INFO = "INFO"
+    }
+
+    fun sayHello() = "Welcome"
+}
+
+fun main() {
+    var welcome = Welcome.createInstance()
+    println(welcome.sayHello())
+    println(Welcome.MESSAGE)
+    println(Welcome.INFO)
+
+}
+...................................................................................
+			 Scope Functions
+...................................................................................
+
+Scope functions are built in kotlin standard lib functions like toString,hashcode,equals.
+
+Scope functions primary purpose is to execute a block of code(lambda) within the context of an object.
+
+"Scope" means when you call scope functions on an object with a lambda expressions provided, it forms temporary scope, you can access the properties without its name.
+
+
+There are five scope functions:
+...............................
+
+1.let
+2.run 
+3.with
+4.apply
+5.also
+
+Scope functions simiplify the object property access.
+
+Without scope functions how to access Object properties:
+package com.ibm.kotlin.oo.scopefunctions
+
+
+data class User(var name: String, var location: String, var points: Int) {
+    //biz methods
+    fun updateLocation(newLocation: String) {
+        location = newLocation
+    }
+
+    fun incrementPoints() {
+        points++
+    }
+
+}
+
+fun main() {
+    var user = User(name = "Subramanian", location = "Coimbatore", points = 100)
+    //access the properties of object
+    println("Location ${user.location}")
+    println("Name${user.name}")
+    println("Points ${user.points}")
+    user.updateLocation("Chennai")
+    user.incrementPoints()
+    println("Name${user.name}")
+    println("Points ${user.points}")
+}
+Here we have accessed properties using reference variables
+...........................
+How to access the properties with scope functions:
+
+
+Scope functions and its difference
+
+.................................................................................
+Function Name         Object Reference    Return Value  isExtension Function.
+ let                   it                 Lambda         Yes
+ run                   this               Lambda         Yes
+ with                  this               Lambda         No
+ apply                 this               Object         Yes
+ also                  it                 Object         Yes
+...................................................................................
+
+Function Name says that name of the scope function
+Object Reference says that how object properties are accesed inside scope lambda(this or it)
+Return value of the scope functions could be object itself(this), lambda expression.
+
+
+package com.ibm.kotlin.oo.scopefunctions
+
+
+data class User(var name: String, var location: String, var points: Int) {
+    //biz methods
+    fun updateLocation(newLocation: String) {
+        location = newLocation
+    }
+
+    fun incrementPoints() {
+        points++
+    }
+
+}
+
+fun main() {
+    var user = User(name = "Subramanian", location = "Coimbatore", points = 100)
+    //access the properties of object using reference value
+    println("Location ${user.location}")
+    println("Name${user.name}")
+    println("Points ${user.points}")
+    user.updateLocation("Chennai")
+    user.incrementPoints()
+    println("Name${user.name}")
+    println("Points ${user.points}")
+    // Using let keyword
+    User(name = "Subramanian", location = "Coimbatore", points = 100).let {
+        //scope
+        println("Location ${it.location}")
+        println("Name${it.name}")
+        println("Points ${it.points}")
+        //return value
+        it
+    }.let {
+        it.updateLocation("Chennai")
+        it.incrementPoints()
+        it
+    }.let {
+        println("Name${user.name}")
+        println("Points ${user.points}")
+    }
+    "hello".let {
+        it.uppercase()
+        it
+    }.let {
+        println(it)
+    }
+
+    //using run method
+    User(name = "Subramanian", location = "Coimbatore", points = 100).run {
+        //scope
+        println("Location ${this.location}")
+        println("Name${this.name}")
+        println("Points ${this.points}")
+        //return value
+        this
+    }.run {
+        this.updateLocation("Chennai")
+        this.incrementPoints()
+        this
+    }.run {
+        println("Name${this.name}")
+        println("Points ${this.points}")
+    }
+
+    //using with method
+    var myUser = User(name = "Subramanian", location = "Coimbatore", points = 100)
+
+    println("With ")
+    with(myUser.run {
+        println("Location ${location}")
+        println("Name${name}")
+        println("Points ${points}")
+        this
+    }) {
+        updateLocation("Chennai")
+        incrementPoints()
+        println("Name${name}")
+        println("Points ${points}")
+        this
+    }
+    with("subramanian".run {
+        println("upper" + uppercase())
+        trim()
+        println(this)
+        this
+    }) {
+        println("length " + this.length)
+    }
+
+    println("Apply function...")
+    //apply
+    User(name = "Subramanian", location = "Coimbatore", points = 100).apply {
+        println(this.name + " " + name)
+        println(location)
+        println(points)
+        name = "Murugan"
+        updateLocation("US")
+        incrementPoints()
+        this
+    }.apply {
+        println(name)
+        println(location)
+        println(points)
+    }
+    //also
+    println("also function...")
+    User(name = "Subramanian", location = "Coimbatore", points = 100).also {
+        println(it.name)
+        println(it.location)
+        //you dont need to return this manually : implicit this
+    }.apply {
+        println(name)
+        println(location)
+        println(points)
+    }
+
+
+}
+
+....................................................................................
+			  Operator Overloading
+....................................................................................
+operator overloding means we can use existing operators for different purposes let say
+ + operator is used to arthmetic operations
+  10 + 10 => 20  Numerical compuations
+ + operator is used for concat two strings. string with any other values
+
+ "hello" + "world" => "hello world" - concatnation
+
+Operator overloading is not permitted in java but kotlin offers operator overloading feature in kotlin
+
+Kotlin offers operator overloading via "operator" key word with functions
+
+Operator functions can be member function of object or extension function .
+
+
+package com.ibm.kotlin.oo.operatoroverloading
+
+class Person {
+    var skills: String? = null
+    fun show() = skills
+}
+
+operator infix fun Person.plus(person: Person): Person {
+    var newPerson = Person()
+    newPerson.skills = this.skills + person.skills
+    return newPerson
+}
+
+
+fun main() {
+    var person1 = Person()
+    person1.skills = "Kotlin"
+    println(person1.show())
+    var person2 = Person()
+    person2.skills = "Mobile Developement"
+    println(person2.show())
+
+    //Coimbine two person skills via operator
+    //var newSkill = person1.plus(person2)
+//    var newSkill = person1 + person2
+    var newSkill = person1 plus person2
+    newSkill.apply {
+        println(show())
+    }
+    //Builtin operator over loaded apis
+    var a: Int = 100
+    var b: Int = 200
+    //without operator overloading
+    var c: Int? = null
+    c = a + b
+    println(c)
+    //with operator overloading
+    c = a.plus(b)
+    println(c) 
+
+}
+...................................................................................
+			 Generics and Collections - Data Structures
+...................................................................................
+Why Generics?
+ Type safty 
+
+
+package com.ibm.kotlin.collections
+
+data class Customer(val id: Int = 1, val name: String = "")
+data class Employee(val id: Int = 1, val name: String = "")
+
+interface CustomerRepository {
+    val isEmpty: Boolean get() = true
+    fun store(obj: Customer) {
+        //implement code how to store
+    }
+
+    fun getById(id: Int): Customer
+}
+
+interface EmployeeReposiotry {
+    val isEmpty: Boolean get() = true
+    fun store(obj: Employee) {
+        //implement code how to store
+    }
+
+    fun getById(id: Int): Employee
+}
+
+//implementation classes
+class CustomerRepsitoryImpl : CustomerRepository {
+    override fun getById(id: Int): Customer {
+        TODO("Not yet implemented")
+    }
+
+    override val isEmpty: Boolean
+        get() = super.isEmpty
+
+    override fun store(obj: Customer) {
+        super.store(obj)
+    }
+}
+
+class EmployeeRepsitoryImpl : EmployeeReposiotry {
+    override fun getById(id: Int): Employee {
+        TODO("Not yet implemented")
+    }
+
+    override val isEmpty: Boolean
+        get() = super.isEmpty
+
+    override fun store(obj: Employee) {
+        super.store(obj)
+    }
+}
+
+fun main() {
+    var customerRepository = CustomerRepsitoryImpl()
+    println(customerRepository.isEmpty)
+    var employeeReposiotry = EmployeeRepsitoryImpl()
+    println(employeeReposiotry.isEmpty)
+}
+
+In the above code the interface remains same across multiple repositories...
+
+where code is duplicated.
+
+How to avoid code duplication?
+
+We can have common interface and implmentation class, based on our Type like Customer,Employee....
+
+We need kind of "Common Interface and common class"  - Generics(common).
+
+
+What is Generics?
+  Generics means Parametermized types.
+ The idea is to allow types(Integer,Double,String,Employee) on fly.
+
+In java : you may be thinking programm to super type.
+
+Object o = new String()
+Object o =new Customer()
+
+In Kotlin:
+
+var o:Any = String()
+var o:Any = Customer()
+Any o:Any = Repository()
+
+When we use Program to super type, some times it would be problem
+
+1.Casting issues
+2.Lack of Type Safety
+
+Where we can apply generics?
+
+1.class or interface level
+  You can create type safe container objects by declaring classes
+
+2.function level
+  You can apply type safe functions - generic functions
+
+Generics Syntax:
+ <T>  - Symbol is used to denote type.
+
+
+Generic interface and Generic class:
+package com.ibm.kotlin.collections.generics
+
+data class Customer(val id: Int = 1, val name: String = "Subramanian")
+data class Employee(val id: Int = 1, val name: String = "")
+
+interface Repository<T> {
+    fun getById(id: Int): T
+    fun getAll(): List<T>
+}
+
+class RespositoryImpl<T> : Repository<T> {
+    override fun getAll(): List<T> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getById(id: Int): T {
+        TODO("Not yet implemented")
+    }
+}
+
+fun main() {
+    //customer Object
+    var customers = RespositoryImpl<Customer>()
+    customers.getAll()
+    customers.getById(1)
+    var employees = RespositoryImpl<Employee>()
+    employees.getById(3)
+    employees.getAll()
+}
+
+Generic functions
+
+package com.ibm.kotlin.collections.generics
+
+data class Customer(val id: Int = 1, val name: String = "Subramanian")
+data class Employee(val id: Int = 1, val name: String = "")
+
+interface Repository<T> {
+    fun <T> getById(id: Int): T
+    fun <E> getAll(): List<T>
+}
+
+class RespositoryImpl<T> : Repository<T> {
+    override fun <E> getAll(): List<T> {
+        TODO("Not yet implemented")
+    }
+
+    override fun <T> getById(id: Int): T {
+        TODO("Not yet implemented")
+    }
+}
+
+fun main() {
+    //customer Object
+    var customers = RespositoryImpl<Customer>()
+    customers.getAll<Employee>()
+    customers.getById<Employee>(1)
+    var employees = RespositoryImpl<Employee>()
+    employees.getById<Customer>(3)
+    employees.getAll<Customer>()
+}
+...................................................................................
+				Collections
+...................................................................................
+
+Kotlin and Data structure:
+.........................
+
+Kotlin supports multiple data structures like java.
+
+Array
+  It is fundamental data structure
+  Array is object
+  Array is fixed ds
+  Array can accept any type of values
+
+Kotlin and Arrays:
+
+In Kotlin Array is Object represented by "Array" class
+It has setters and getters- set and get functions
+It has size property
+
+Primitive Arrays:
+IntArray
+ShortArray
+ByteArray
+
+Array object creations:
+
+1.using factory apis
+  intArrayOf()
+
+2.Using constructor functions
+  Arg is capacity of array
+  IntArray(10) or Array()
+
+
+package com.ibm.kotlin.collections.arrays
+
+fun main() {
+    //factory api
+    var myIntArray: IntArray = intArrayOf(1, 2, 3, 4, 5, 6, 7)
+    println(myIntArray.get(0))
+    //log all values
+    myIntArray.iterator().forEach { println(it) }
+
+    //not recommened
+    //constructors
+    var counters = IntArray(5)
+    counters.set(0, 1)
+    counters.set(1, 2)
+    counters.forEach { println(it) }
+    //Constructor
+    var strArray = Array(3, { i -> "hello ${i}" })
+    strArray.iterator().forEach { println(it) }
+
+    //generic api
+    arrayOf<String>("Kotlin","Java","Scala").let {
+        it.forEach { println(it) }
+    }
+}
+....................................................................................
+			  Dynamic Array: Collections
+....................................................................................
+
+Kotlin Collections has been built on the top of java collections.
+
+General Collection/ds
+
+1.List
+2.Set
+3.Map
+
+1.List:
+   Ordered collection 
+   with elements by index
+   with elmenets by hashcode
+   with insertion order.
+
+2.Set 
+   Collection 
+     with unique elements- No duplicates
+   order is dermined by natural order of the elements
+  
+3.Map
+   set of key-value pairs
+   keys are unique,each of them maps exactly one value.
+
+
+Collections types:
+1.readonly collection - Immutable collection
+2.write only- Mutable collections
+
+Mutable collections:List
+package com.ibm.kotlin.collections
+
+fun main() {
+    var list = mutableListOf<Int>(1, 2, 3)
+    list.forEach { println(it) }
+    list.add(13)
+    list.add(33)
+    list.forEach { println(it) }
+    //using scope functions
+    mutableListOf<Int>(1, 2, 3).apply {
+        add(33)
+        add(34)
+    }.apply {
+        println("Before Sorting")
+        forEach { println(it) }
+    }.apply {
+        sortByDescending { it }
+    }.apply {
+        println("After Sorting")
+        forEach { println(it) }
+    }
+
+}
+
+Mutable Collection: Set : No duplicates
+
+package com.ibm.kotlin.collections
+
+fun main() {
+    mutableSetOf<Int>(1, 2, 3, 4, 5).apply {
+        add(1)
+        add(2)
+        add(10)
+        add(4)
+    }.apply {
+        forEach { println(it) }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
