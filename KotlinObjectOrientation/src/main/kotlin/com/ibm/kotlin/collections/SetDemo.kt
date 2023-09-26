@@ -6,7 +6,5 @@ fun main() {
         add(2)
         add(10)
         add(4)
-    }.apply {
-        forEach { println(it) }
-    }
+    }.onEach { println(it) }
 }

@@ -5072,49 +5072,722 @@ fun main() {
         forEach { println(it) }
     }
 }
+Mutable Collections : Map : key-value
+package com.ibm.kotlin.collections
+
+
+fun main() {
+    mutableMapOf<String, Int>("value1" to 100, "value2" to 200).apply {
+        values.forEach { println(it) }
+        keys.forEach { println(it) }
+    }
+}
+....................................................................................
+			Collection Processing
+....................................................................................
+
+1.transformation
+3.filtering
+3.grouping
+
+
+package com.ibm.kotlin.collections
+
+fun transform() {
+    listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).let {
+        println("Before Processing")
+        it.forEach { println(it) }
+        it
+    }.let {
+        //double the no
+        it.map { it * 2 } //this should be returned
+    }.let {
+        println("After Processing")
+        it.forEach { println(it) }
+    }
+}
+
+fun filter() {
+    listOf<Int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).let {
+        it.filter { it % 2 === 0 }
+    }.let {
+        it.forEach { println(it) }
+    }
+}
+
+fun main() {
+    //transform()
+    filter()
+}
+...................................................................................
+			 Asynchronous Programming
+			  (Non Blocking Apps)
+..................................................................................
+
+What is Synchronous or Blocking Programming?
+
+How and who is executing the program?
+ Process
+
+Every process is powered by threadings (which is sub process)
+Every process is multi threading
+
+if you look at java program, are executed by a thread "main" thread.
+
+Program:
+ main(){
+   1.task-1-method - is being executed - who is executing? main thread
+   2.task-2-method - is being executed - who is executing? main thread
+   3.task-3-method - is being executed - who is executing? main thread 
+ }
+Blocking:
+  When task-1 is running long time because of "IO OR Cpu intensive task"
+  taks-2,task-3,task-4....keep on waiting-This is called blocking
+
+What will happen when you block a thread?
+
+=>You cant run other tasks
+=>if a thread is blocked long time, "resources" would be waste
+
+Solutions:
+
+1.Why cant run application concurrently(parrell)
+
+ Each task can be executed in a separate thread of execution, so that main thread will not be blocked.
+
+ Based on Multi threading , we can achive parrellism and concurrency.
+
+
+Based on this arch only,Web servers are working, Web Servers was designed based on this arch.
+                   "Request Per Thread Model"
+
+
+This model introduces mutli threading approach.
+
+In 2000, Community identified the problem with this arch.
+
+Drawbacks:
+1.if more threads, os need to do context switch.
+2.Threads are not cheapier, when a thread is created, it takes small amount of memory
+  which may take up to 5mb
+3.thread dead locks
+4.starvation
+etc....
+
+Solution for multi threading Blocking Model:
+
+1.Non blocking arc /Async 
+  
+A.Having limitied no of threads with max concurrency
+
+                      "Non Blocking io apis"
+
+Evented IO / Event Driven Programming model
+
+How to limit by reducing threads, achiving more concurrency.
+
+
+.....................................................................................
+			How to implement nonblocking arch
+.....................................................................................
+
+Requirments:
+............
+
+Level -1
+
+0.Operating System should support non blocking apis
+1.Application run time(JVM) should support low level non blocking apis like select,poll,epoll apis.
+2.Java 7, introduced non blocking apis via "nio" package.
+
+Level- 2
+ How to invoke nonblocking apis?
+     language/framework provides high level apis
+ 
+Techniques to build non blockingapps
+    
+1.callbacks /listeners
+  A function/method which is registered for an event, as soon as event is submitted
+by kernal this function gets notified, which is pushed into stack and handles results.
+   
+2.Futures,Promises
+  Futures and Promises are objects which abstracts away callback programming.
+  in order to avoid callback hell.
+
+3.Rx
+  The advanced programming model which handles events and streams.
+
+Coroutines:
+ What is Co routines?
+
+Co means - Cooperative
+Routines (sub) - Procedure / sub Procedure/functions/methods
+
+
+Cooperative functions:
+    functions are communicated.
+
+Coroutines are computer program components that generalize subroutines for non-preemptive multitasking, by allowing execution to be suspended and resumed
+
+How functions cooperate with each other? normal function call
+
+
+AFunction(){                               AFunction(){
+                                               1.
+					       2.
+  AnonterFunction() --------------->	       3.
+					       return
+}   
+
+Another function will return only, when all the task(1,2,3,4...) is completed
+
+How functions cooerate with each other? - Cooperative functions(co coutines)
+............................................................................
+
+AFunction(){                               AFunction(){
+                                               1.
+					         // I am done for you ,you continue
+  AnonterFunction() --------------->	       
+  					   <--------
+   ok,i will do something                    					
+   i am done for you, you start ------------------>  
+						2.
+						  //start 2nd task
+						Complete and Return
+}     
+
+
+.....................................................................................					callbacks
+
+api--returns result--based on result --- i want to call another api---again another api. - callback nesting - async composition.
+
+getUser(user->{
+   login(user,status->{
+	dashboard(page->{})
+  })
+})
+callback hell:
+   callback hell is way of writing async program using callbacks.
+   When we compose async ,using callbacks, it is very difficult to debug,scale,understand,maintain code.
+
+How to solve callback hell?
+  using simple code patterns
+
+Code should be like sync work flow, but it should be async
+
+fun  loadData(){
+  val data = networkRequest() 
+  val newData =anotherRequest(data) 
+}
+
+				Coroutines Coding side
+.....................................................................................
+
+How to schedule task in background?
+
+ Using Threads
+ Using coroutines
+
+package com.ibm.coroutines
+
+import kotlin.concurrent.thread
+
+fun delay() {
+    println("Delay task")
+    println("Delay task is running at ${Thread.currentThread().name}")
+}
+
+fun main() {
+    println("Main Program Starts ${Thread.currentThread().name}")
+    thread(name = "My Thread") {
+        delay()
+    }
+}
+
+...............................................................................
+How to schedule the task using coroutines?
+
+Create Coroutines?
+  we have apis - Co-routine Builders
+  1.lanuch
+  2.async
+  3.runBlocking
+
+NOte : Coroutines is not part of core kotlin language, we need to add maven dependency.
+
+package com.ibm.coroutines
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+fun delayTask() {
+    println("Delay Task runs in ${Thread.currentThread().name}")
+}
+
+fun main() {
+    println("Main Thread ${Thread.currentThread().name}")
+    //Get the Co-Routine
+    GlobalScope.launch {
+        delayTask()
+    }
+}
+
+After running this you can see only main thread Output,the reason is main thread is already completed but still coroutines runs in the back round.
+
+How to get output of co-routines?
+
+There are various ways.
+
+Way -1:
+ Pause the main thread for some time.
+
+
+package com.ibm.coroutines
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+fun delayTask() {
+    println("Delay Task runs in ${Thread.currentThread().name}")
+}
+
+fun main() {
+    println("Main Thread ${Thread.currentThread().name}")
+    //Get the Co-Routine
+    GlobalScope.launch {
+        delayTask()
+    }
+    Thread.sleep(5000)
+}
+
+How to lanuch coroutine?
+ like thread
+
+thread.start()----->
+GlobalScope.lanuch	
+
+GlobalScope:
+object GlobalScope : CoroutineScope
+A global CoroutineScope not bound to any job. Global scope is used to launch top-level coroutines which are operating on the whole application lifetime and are not cancelled prematurely.
+
+
+CoroutineScope:
+  This is top level 
+Defines a scope for new coroutines. Every coroutine builder (like launch, async, etc.) is an extension on CoroutineScope and inherits its coroutineContext to automatically propagate all its elements and cancellation.
+
+The best ways to obtain a standalone instance of the scope are CoroutineScope() and MainScope() factory functions, taking care to cancel these coroutine scopes when they are no longer needed (see section on custom usage below for explanation and example).
+....................................................................................
+
+How to delay coroutines?
+
+package com.ibm.coroutines
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+//suspend functions are functions which are called for async operations
+suspend fun delayTask() {
+    println("Delay Task runs in ${Thread.currentThread().name}")
+}
+
+fun main() {
+    println("Main Thread ${Thread.currentThread().name}")
+    //Get the Co-Routine
+    GlobalScope.launch {
+        delayTask()
+    }
+    Thread.sleep(5000)
+}
+
+Here Thread.sleep is constant, what if co-routine is taking so much time than thread.sleep.
+
+....................................................................................
+			coroutine and Thread.sleep method
+....................................................................................
+if you want to schedule delay task,dont use Thread.sleep , because this blocks the thread where ever. here Thread.sleep blocks the main thread.
+
+suspend maker:suspend function:
+...............................
+supend functions are function which controls execution of async task.
+suspend functions will have async task.
+
+suspend fun delay(timeMillis: Long)
+
+Delays coroutine for a given time without blocking a thread and resumes it after a specified time.
+
+This suspending function is cancellable. If the Job of the current coroutine is cancelled or completed while this suspending function is waiting, this function immediately resumes with CancellationException
+
+fun main() {
+    println("Main Thread ${Thread.currentThread().name}")
+    //Get the Co-Routine
+    GlobalScope.launch {
+        delayTask()
+    }
+    //Thread.sleep(5000)
+    delay(1000)
+}
+The above code cause error, "delay is suspend function" can be called only within another suspend function.
+
+
+package com.ibm.coroutines.delays
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+//suspend functions are functions which are called for async operations
+suspend fun delayTask() {
+    //Thread.sleep(1000)
+    delay(1000)
+    println("Delay Task runs in ${Thread.currentThread().name}")
+}
+
+fun main() {
+    println("Main Thread ${Thread.currentThread().name}")
+    //Get the Co-Routine
+    GlobalScope.launch {
+        delayTask()
+    }
+    Thread.sleep(5000)
+//    delay(1000)
+}
+
+How coroutine thread and main thread(UI) Can Co-operate without using Thread.sleep?
+
+I have to pause the main thread(UI) thread, until the co routine completes its tasks.
+		   
+There is builder function.
+ runBlocking
+
+expect fun <T> runBlocking(context: CoroutineContext = EmptyCoroutineContext, block: suspend CoroutineScope.() -> T): T
+    
+     Runs a new coroutine and blocks the current thread until its completion. This function should not be used from a coroutine. It is designed to bridge regular blocking code to libraries that are written in suspending style, to be used in main functions and in tests.
+
+package com.ibm.coroutines.delays
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
+//suspend functions are functions which are called for async operations
+suspend fun delayTask() {
+    //Thread.sleep(1000)
+    delay(1000)
+    println("Delay Task runs in ${Thread.currentThread().name}")
+}
+
+fun main() {
+    runBlocking {
+        println("Main Thread ${Thread.currentThread().name}")
+        //Get the Co-Routine
+        GlobalScope.launch {
+            delayTask()
+        }
+        delay(10000)
+    }
+}
+
+Coroutine Builders
+
+It is function that help us to create a coroutine,
+The can be called from the normal functions because they do not supend them seleves.
+
+1.launch
+2.runBlocking
+3.async
+
+1.lanuch
+  start new coroutine in the background and keep working...
+  lanuch returns Job Object
+
+2.runBlocking
+    Blocks the current thread and waits for the the other coroutine to finish its execution
+
+3.async
+  perform async operation and return a defered Object
+  Which is eq to Promise Object in js
+  We can call "await" on the Defered Value in order to wait and get the result.
+...............................................................................
+
+Lanuch and Job:
+package com.ibm.coroutines.job
+
+import kotlinx.coroutines.*
+
+fun main() {
+    runBlocking {
+        var job: Job = GlobalScope.launch {
+            //async task
+            delay(1000)
+            println("hello")
+        }
+        //join with main thread
+        job.join()
+        println("done")
+    }
+}
+..
+Do you want to result from async task. 
+
+async Builder
+
+lanuch vs async
+->lanuch returns only JOb object so that you cancel or join
+->async returns defered Object , so that you can get values from the async operations.
+package com.ibm.coroutines.job
+
+import kotlinx.coroutines.*;
+
+fun main() {
+    runBlocking {
+        var job: Deferred<String> = async {
+            delay(1000) //after 1000 ms return hello
+            "Hello " //value to be returned
+        }
+        job.join()
+        println(job.await())
+    }
+}
+....................................................................................
+				Dispatchers
+....................................................................................
+
+Dispatchers are nothing but category of threads , used for category operations.
+
+Types of Thread
+1.Dispatchers.Main
+2.Dispatchers.IO
+3.Dispatchers.Default
+
+Theses threads can be used with any builders( lanuch,async)
+
+Dispatchers.Main
+
+ if build android app, interact with the UI and perform lightweight tasks
+  ->calling suspend functions
+  ->calling ui functions
+  ->Updating live data on Ui
+
+Dispatchers.IO
+  Optimized for disk and network IO off the main thread
+ ->Database calls
+ ->Reading and writing files
+ ->Networking operations
+
+Dispatchers.Default
+  Optimized for cpu intensive task off the main thread.
+  ->Sorting a huge list items
+  ->Parsing json
+  ->Some utility functions
+
+
+package com.ibm.coroutines.dispatchers
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+
+suspend fun get() {
+    withContext(Dispatchers.IO) {
+        println("IO TASKS SUCH NETWORK APICALLS")
+        println(Thread.currentThread().name)
+    }
+}
+
+fun main() {
+    runBlocking {
+        launch {
+            get()
+        }
+    }
+}
+....................................................................................
+			Delegation
+
+
+What is delegation?
+
+ Delegation is one the oo design pattern that allows object composition to achive code resue.
+
+ In delegation design pattern a object handles a request by delegating to a second object(delegate).
+
+ Delegation design pattern helps for loosly coupled programming.
+
+In java like object oriented programming, the delegation design pattern has to be implemented from begining.
+
+Kotlin provides nice abstraction for delegation design pattern. in kotlin you dont need to foucs how to implement design pattern rather you can write biz logic....
+
+delegation is abstracted by a keyword "by"
+
+package com.ibm.kotlin.delegation
+
+interface Downloader {
+    fun download()
+}
+
+interface Player {
+    fun play()
+}
+
+class FiledDownloader(val fileName: String) : Downloader {
+    override fun download() {
+        println("$fileName is downloaded")
+    }
+}
+
+class FilePlayer(val fileName: String) : Player {
+    override fun play() {
+        println("$fileName is Playing")
+    }
+}
+
+//without delegation
+//class MediaFile(private val downloader: Downloader, private val player: Player) : Downloader, Player {
+//    override fun download() {
+//        downloader.download()
+//    }
+//
+//    override fun play() {
+//        player.play()
+//    }
+//}
+class MediaFile(
+    private val downloader: Downloader,
+    private val player: Player
+) : Downloader by downloader, Player by player {}
+
+fun main() {
+    val mediFile = MediaFile(FiledDownloader("movie.mp4"), FilePlayer("movie.mp4"))
+    mediFile.play()
+    mediFile.download()
+}
+...................................................................................
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.Text
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            Text("Hello world!")
+        }
+    }
+}
+  
+import androidx.compose.runtime.Composable
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MessageCard("Android")
+        }
+    }
+}
+
+@Composable
+fun MessageCard(name: String) {
+    Text(text = "Hello $name!")
+}
+
+// ...
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MessageCard(Message("Android", "Jetpack Compose"))
+        }
+    }
+}
 
 
 
+data class Message(val author: String, val body: String)
 
+@Composable
+fun MessageCard(msg: Message) {
+    Text(text = msg.author)
+    Text(text = msg.body)
+}
 
+@Preview
+@Composable
+fun PreviewMessageCard() {
+    MessageCard(
+        msg = Message("Lexi", "Hey, take a look at Jetpack Compose, it's great!")
+    )
+}
 
+ ..
+// ...
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
+class MainActivity : ComponentActivity() {
+   override fun onCreate(savedInstanceState: Bundle?) {
+       super.onCreate(savedInstanceState)
+       setContent {
+           ComposeTutorialTheme {
+               Conversation(SampleData.conversationSample)
+           }
+       }
+   }
+}
 
+@Composable
+fun MessageCard(msg: Message) {
+    Row(modifier = Modifier.padding(all = 8.dp)) {
+        Image(
+            painter = painterResource(R.drawable.profile_picture),
+            contentDescription = null,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
 
+        // We keep track if the message is expanded or not in this
+        // variable
+        var isExpanded by remember { mutableStateOf(false) }
 
+        // We toggle the isExpanded variable when we click on this Column
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
+            Text(
+                text = msg.author,
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleSmall
+            )
 
+            Spacer(modifier = Modifier.height(4.dp))
 
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                shadowElevation = 1.dp,
+            ) {
+                Text(
+                    text = msg.body,
+                    modifier = Modifier.padding(all = 4.dp),
+                    // If the message is expanded, we display all its content
+                    // otherwise we only display the first line
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 
 
 
